@@ -1,9 +1,14 @@
 from django.contrib import admin
-from .models import Question, QuestionPaper, PaperQuestion
+from .models import Question, QuestionPaper, PaperQuestion, QuestionUpload
+import openpyxl
+import docx
+
 
 class PaperQuestionInline(admin.TabularInline):
     model = PaperQuestion
-    extra = 0
+    extra = 1
+    autocomplete_fields = ["question"]  # 🔥 searchable dropdown for questions
+
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
@@ -11,8 +16,131 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ("part", "trade", "level", "skill", "category", "is_active")
     search_fields = ("text",)
 
+
 @admin.register(QuestionPaper)
-class PaperAdmin(admin.ModelAdmin):
-    list_display = ("title", "is_common", "trade", "level", "skill", "category", "active_from", "active_to")
+class QuestionPaperAdmin(admin.ModelAdmin):
+    list_display = ("title", "upload", "is_common", "trade", "level", "skill", "category", "active_from", "active_to")
     list_filter = ("is_common", "trade", "level", "skill", "category")
     inlines = [PaperQuestionInline]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        # 🔥 If a file is linked, auto-attach its questions to this paper
+        if obj.upload:
+            questions = Question.objects.filter(created_at__gte=obj.upload.uploaded_at)
+            for i, q in enumerate(questions, start=1):
+                PaperQuestion.objects.get_or_create(
+                    paper=obj,
+                    question=q,
+                    defaults={"order": i}
+                )
+
+
+@admin.register(QuestionUpload)
+class QuestionUploadAdmin(admin.ModelAdmin):
+    list_display = ("file", "uploaded_at")
+    search_fields = ("file",)
+
+    def save_model(self, request, obj, form, change):
+        """Handle file upload and trigger import"""
+        super().save_model(request, obj, form, change)
+
+        if obj.file.name.endswith(".xlsx"):
+            self.import_from_excel(obj.file.path)
+        elif obj.file.name.endswith(".docx"):
+            self.import_from_word(obj.file.path)
+
+    # -----------------------------
+    # ✅ Import from Excel
+    # -----------------------------
+    def import_from_excel(self, filepath):
+        wb = openpyxl.load_workbook(filepath)
+        sheet = wb.active
+
+        for row in sheet.iter_rows(min_row=2, values_only=True):  # skip header
+            part, question_text, opt_a, opt_b, opt_c, opt_d, correct, marks, desc_answer = row
+
+            if not part or not question_text:
+                continue  # skip empty rows
+
+            if part in ["A", "B", "C"]:  # Objective
+                Question.objects.create(
+                    part=part,
+                    text=question_text,
+                    options={"choices": [opt_a, opt_b, opt_c, opt_d]},
+                    correct_answer=correct,
+                    marks=marks or 1,
+                )
+            elif part in ["D", "E"]:  # Descriptive
+                Question.objects.create(
+                    part=part,
+                    text=question_text,
+                    correct_answer=desc_answer,
+                    marks=marks or (5 if part == "D" else 10),
+                )
+
+    # -----------------------------
+    # ✅ Import from Word
+    # -----------------------------
+    def import_from_word(self, filepath):
+        doc = docx.Document(filepath)
+        question_text, options, correct, marks, part, desc_answer = None, [], None, 1, None, None
+
+        for para in doc.paragraphs:
+            text = para.text.strip()
+            if not text:
+                continue
+
+            if text.startswith("Q"):  # New Question
+                if question_text:  # Save previous
+                    self._save_question(part, question_text, options, correct, desc_answer, marks)
+
+                # Reset
+                question_text, options, correct, marks, part, desc_answer = text, [], None, 1, None, None
+
+            elif text.startswith("Part:"):
+                part = text.split(":", 1)[1].strip().upper()
+
+            elif text.startswith(("A)", "B)", "C)", "D)")):
+                options.append(text[2:].strip())
+
+            elif text.startswith("Answer:"):
+                ans = text.split(":", 1)[1].strip()
+                if part in ["A", "B", "C"]:
+                    correct = ans
+                else:
+                    desc_answer = ans
+
+            elif text.startswith("Marks:"):
+                try:
+                    marks = int(text.split(":", 1)[1].strip())
+                except:
+                    marks = 1
+
+        # Save last question
+        if question_text:
+            self._save_question(part, question_text, options, correct, desc_answer, marks)
+
+    # -----------------------------
+    # ✅ Helper
+    # -----------------------------
+    def _save_question(self, part, question_text, options, correct, desc_answer, marks):
+        if not part:
+            return  # avoid NULL part
+
+        if part in ["A", "B", "C"]:
+            Question.objects.create(
+                part=part,
+                text=question_text,
+                options={"choices": options},
+                correct_answer=correct,
+                marks=marks,
+            )
+        elif part in ["D", "E"]:
+            Question.objects.create(
+                part=part,
+                text=question_text,
+                correct_answer=desc_answer,
+                marks=marks,
+            )

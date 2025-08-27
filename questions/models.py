@@ -1,6 +1,6 @@
-# questions/models.py
 from django.db import models
 from reference.models import Trade, Level, Skill, QF, Category
+
 
 class Question(models.Model):
     class Part(models.TextChoices):
@@ -11,14 +11,17 @@ class Question(models.Model):
         E = "E", "Part E - Long answer (100-120 words)"
 
     text = models.TextField()
-    part = models.CharField(max_length=1, choices=Part.choices)
+    part = models.CharField(max_length=1, choices=Part.choices)  # required
     marks = models.DecimalField(max_digits=5, decimal_places=2, default=1)
 
-    # For objective (A,B,C)
-    options = models.JSONField(blank=True, null=True)      # e.g. {"choices": ["A","B","C","D"]}
-    correct_answer = models.JSONField(blank=True, null=True)  # e.g. "B" or True or "word"
+    # ✅ For objective (A,B,C)
+    options = models.JSONField(blank=True, null=True)         # {"choices": ["A","B","C","D"]}
+    correct_answer = models.JSONField(blank=True, null=True)  # "B" or True or "Delhi"
 
-    # Metadata / bank ownership
+    # ✅ For descriptive (D,E) → just `text` + `marks` + expected answer
+    # stored in correct_answer if provided
+
+    # Metadata
     trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, null=True, blank=True)
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, blank=True)
@@ -28,11 +31,20 @@ class Question(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self): return f"[{self.get_part_display()}] {self.text[:60]}..."
+    def __str__(self):
+        return f"[{self.get_part_display()}] {self.text[:60]}..."
+
+
+class QuestionUpload(models.Model):
+    file = models.FileField(upload_to="uploads/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name
 
 class QuestionPaper(models.Model):
     title = models.CharField(max_length=150)
-    is_common = models.BooleanField(default=False)  # False = Primary-I (trade-specific)
+    is_common = models.BooleanField(default=False)  # False = trade-specific
     trade = models.ForeignKey(Trade, on_delete=models.PROTECT, null=True, blank=True)
     level = models.ForeignKey(Level, on_delete=models.PROTECT, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True)
@@ -41,10 +53,14 @@ class QuestionPaper(models.Model):
 
     active_from = models.DateField(null=True, blank=True)
     active_to = models.DateField(null=True, blank=True)
+    upload = models.ForeignKey(QuestionUpload, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     questions = models.ManyToManyField(Question, through="PaperQuestion")
 
-    def __str__(self): return self.title
+    def __str__(self):
+        return self.title
+
 
 class PaperQuestion(models.Model):
     paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
@@ -54,3 +70,6 @@ class PaperQuestion(models.Model):
     class Meta:
         unique_together = ("paper", "question")
         ordering = ["order", "id"]
+
+
+
