@@ -94,18 +94,24 @@
 
         <div class="dashboard-section">
             <div class="card">
-                <h2>Scheduled Exams</h2>
-                {% if exams_scheduled %}
-                    <ul>
-                        {% for exam in exams_scheduled %}
-                            <li>{{ exam.name }} - {{ exam.date }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No scheduled exams</p>
-                {% endif %}
-            </div>
-
+    <h2>Scheduled Exams</h2>
+    
+        <ul>
+            
+                <li>
+                    <strong>Category:</strong> {{ candidate.category }} <br>
+                    <strong>Center:</strong> {{ candidate.center }} <br>
+                    <strong>Shift:</strong> {{ candidate.shift }} <br>
+                    {% if candidate.can_start_exam %}
+        <a href="{% url 'exam_interface' %}" class="start-btn">Start Exam</a>
+    {% else %}
+        <button class="start-btn" disabled>Start Exam (Not Yet Available)</button>
+    {% endif %}
+                </li>
+            
+        </ul>
+    
+</div>
             <div class="card">
                 <h2>Completed Exams</h2>
                 {% if completed_exams %}

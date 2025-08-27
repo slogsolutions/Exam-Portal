@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth.models import User
-from .models import CandidateProfile
 from django.contrib.auth import get_user_model
+from .models import CandidateProfile
+
 User = get_user_model()
 
 class CandidateRegistrationForm(forms.ModelForm):
@@ -16,8 +16,14 @@ class CandidateRegistrationForm(forms.ModelForm):
             "fmn_bde", "fmn_div", "fmn_corps", "fmn_comd",
             "trg_centre", "district", "state", "qualification",
             "level_of_qualification", "nsqf_level", "skill", "qf",
-            "photograph", "category", "center"
+            "photograph", "category", "center", "shift"
         ]
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already taken. Please choose another.")
+        return username
 
     def save(self, commit=True):
         user = User.objects.create_user(
@@ -50,7 +56,7 @@ class CandidateRegistrationForm(forms.ModelForm):
             qf=self.cleaned_data["qf"],
             category=self.cleaned_data["category"],
             center=self.cleaned_data["center"],
+            shift=self.cleaned_data["shift"],
             photograph=self.cleaned_data.get("photograph"),
         )
         return candidate
-

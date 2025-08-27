@@ -1,19 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import CandidateProfile
-# assuming you have Exam / Result models, otherwise dummy placeholders
-# from exams.models import Exam, Result  
+from .forms import CandidateRegistrationForm
 
 @login_required
 def candidate_dashboard(request):
-    # fetch candidate profile using logged-in user
     candidate_profile = get_object_or_404(CandidateProfile, user=request.user)
-
-    # TODO: replace below placeholders with actual querysets from Exam / Result models
-    exams_scheduled = []   # Example: Exam.objects.filter(candidate=candidate_profile, status="scheduled")
-    upcoming_exams = []    # Example: Exam.objects.filter(candidate=candidate_profile, status="upcoming")
-    completed_exams = []   # Example: Exam.objects.filter(candidate=candidate_profile, status="completed")
-    results = []           # Example: Result.objects.filter(candidate=candidate_profile)
+    exams_scheduled = []
+    upcoming_exams = []
+    completed_exams = []
+    results = []
 
     return render(request, "registration/dashboard.html", {
         "candidate": candidate_profile,
@@ -22,21 +18,23 @@ def candidate_dashboard(request):
         "completed_exams": completed_exams,
         "results": results,
     })
-from django.shortcuts import render, redirect
-from .forms import CandidateRegistrationForm
 
 def register_candidate(request):
     if request.method == "POST":
-        
-        print("Form is valid")
         form = CandidateRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            print("Form is valid and saved")
-            return redirect("login")  # Define this URL/view
-        else:
-            print("error")
+            candidate = form.save(commit=False)
+            candidate.user = request.user   # ✅ link logged-in user
+            candidate.save()
+            return redirect("login")
     else:
-        print("invalid")
         form = CandidateRegistrationForm()
     return render(request, "registration/register_candidate.html", {"form": form})
+
+
+def exam_interface(request):
+    candidate_profile = get_object_or_404(CandidateProfile, user=request.user)
+    if not candidate_profile.can_start_exam:
+        return render(request, "registration/exam_not_started.html", {"message": "You cannot start the exam yet."})
+
+    return render(request, "registration/exam_interface.html", {"candidate": candidate_profile})
