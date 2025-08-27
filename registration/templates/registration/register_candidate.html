@@ -1,890 +1,485 @@
-"<!-- <h2>Candidate Registration</h2>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Registration</title>
+    <title>Indian Army - Candidate Registration</title>
     <style>
-        /* Bootstrap CSS (Offline Version) */
-        *,*::before,*::after{box-sizing:border-box}html{font-family:sans-serif;line-height:1.15;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;text-align:left;background-color:#fff}.container{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}@media (min-width:576px){.container{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container{max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}.row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}.col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12,.col,.col-auto,.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm,.col-sm-auto,.col-md-1,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-10,.col-md-11,.col-md-12,.col-md,.col-md-auto,.col-lg-1,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg,.col-lg-auto,.col-xl-1,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl,.col-xl-auto{position:relative;width:100%;padding-right:15px;padding-left:15px}.col-md-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-md-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}.card{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;min-width:0;word-wrap:break-word;background-color:#fff;background-clip:border-box;border:1px solid rgba(0,0,0,.125);border-radius:.25rem}.card-body{-ms-flex:1 1 auto;flex:1 1 auto;min-height:1px;padding:1.25rem}.form-group{margin-bottom:1rem}.form-control{display:block;width:100%;height:calc(1.5em + .75rem + 2px);padding:.375rem .75rem;font-size:1rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;background-clip:padding-box;border:1px solid #ced4da;border-radius:.25rem;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out}.form-control:focus{color:#495057;background-color:#fff;border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.btn{display:inline-block;font-weight:400;color:#212529;text-align:center;vertical-align:middle;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;background-color:transparent;border:1px solid transparent;padding:.375rem .75rem;font-size:1rem;line-height:1.5;border-radius:.25rem;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}.btn-secondary{color:#fff;background-color:#6c757d;border-color:#6c757d}.btn-secondary:hover{color:#fff;background-color:#5a6268;border-color:#545b62}.btn-lg{padding:.5rem 1rem;font-size:1.25rem;line-height:1.5;border-radius:.3rem}.mb-3{margin-bottom:1rem!important}.mb-4{margin-bottom:1.5rem!important}.text-center{text-align:center!important}.d-none{display:none!important}.progress{display:-ms-flexbox;display:flex;height:1rem;overflow:hidden;font-size:.75rem;background-color:#e9ecef;border-radius:.25rem}.progress-bar{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex-pack:center;justify-content:center;overflow:hidden;color:#fff;text-align:center;white-space:nowrap;background-color:#007bff;transition:width .6s ease}.nav{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;padding-left:0;margin-bottom:0;list-style:none}.nav-pills .nav-link{border-radius:.25rem}.nav-pills .nav-link.active{color:#fff;background-color:#007bff}.nav-link{display:block;padding:.5rem 1rem;text-decoration:none;color:#007bff}.nav-link:hover{text-decoration:none;color:#0056b3}
+        :root {
+            --army-green: #2C5F2D;
+            --army-dark-green: #1E3A1F;
+            --army-gold: #FFD700;
+            --army-tan: #C19A6B;
+            --army-light: #F8F4E3;
+        }
         
-        /* Custom Styles */
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .registration-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 2rem 0;
+        body {
+            background-color: #f5f5f5;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%232C5F2D" fill-opacity="0.05" width="100" height="100"/></svg>');
+            color: #333;
+            line-height: 1.6;
         }
         
-        .registration-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: none;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, var(--army-green) 0%, var(--army-dark-green) 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
             overflow: hidden;
         }
         
-        .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            border: none;
-            position: relative;
-        }
-        
-        .card-header::before {
-            content: '';
+        .header::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1.5" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.1"/></svg>');
-        }
-        
-        .card-header h2 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path fill="%23FFD700" fill-opacity="0.1" d="M0 0h40v40H0z"/><path fill="%23FFFFFF" fill-opacity="0.1" d="M0 0l40 40M40 0L0 40"/></svg>');
             z-index: 1;
         }
         
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 15px;
+        .header h2 {
+            position: relative;
+            z-index: 2;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .step {
-            display: flex;
-            align-items: center;
-            margin: 0 1rem;
+        .header p {
+            position: relative;
+            z-index: 2;
+            font-size: 16px;
+            margin-bottom: 5px;
+            opacity: 0.9;
         }
         
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e9ecef;
-            color: #6c757d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .step.active .step-number {
-            background: #007bff;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-        }
-        
-        .step.completed .step-number {
-            background: #28a745;
-            color: white;
-        }
-        
-        .step-title {
-            font-size: 0.9rem;
-            color: #6c757d;
-            font-weight: 500;
-        }
-        
-        .step.active .step-title {
-            color: #007bff;
-            font-weight: 600;
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         
         .form-section {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .form-section.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .form-group {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-control {
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
-            background: white;
-            transform: translateY(-2px);
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-            display: block;
-            font-size: 0.95rem;
-        }
-        
-        .form-label::after {
-            content: ' *';
-            color: #dc3545;
-        }
-        
-        .btn-navigation {
-            padding: 0.75rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            border: none;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
-            border: none;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-        }
-        
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
-        }
-        
-        .progress {
-            height: 8px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
-            border-radius: 10px;
-            transition: width 0.5s ease;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--army-tan);
         }
         
         .section-title {
-            color: #2c3e50;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            position: relative;
+            color: var(--army-dark-green);
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--army-gold);
+            display: flex;
+            align-items: center;
         }
         
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
-            border-radius: 2px;
+        .section-title::before {
+            content: "■";
+            color: var(--army-green);
+            margin-right: 10px;
+            font-size: 24px;
         }
         
-        .input-group {
-            position: relative;
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
         
-        .input-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            z-index: 3;
+        .form-group {
+            margin-bottom: 20px;
         }
         
-        .file-upload {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--army-dark-green);
+            font-size: 15px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+            transition: all 0.3s ease;
         }
         
-        .file-upload input[type=file] {
-            position: absolute;
-            left: -9999px;
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--army-green);
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
         
-        .file-upload-label {
+        .required::after {
+            content: " *";
+            color: #e22;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--army-green) 0%, var(--army-dark-green) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 10px;
+            min-width: 200px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, var(--army-dark-green) 0%, var(--army-green) 100%);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .form-note {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .army-symbol {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .symbol {
+            width: 60px;
+            height: 60px;
+            background-color: var(--army-gold);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            border: 2px dashed #007bff;
-            border-radius: 10px;
-            background: rgba(0, 123, 255, 0.05);
-            color: #007bff;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            position: relative;
+            margin: 0 10px;
         }
         
-        .file-upload-label:hover {
-            background: rgba(0, 123, 255, 0.1);
-            border-color: #0056b3;
+        .symbol::before {
+            content: "✯";
+            font-size: 30px;
+            color: var(--army-dark-green);
         }
         
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -0.75rem;
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
         }
         
-        .form-row .col-md-6 {
-            padding: 0 0.75rem;
-        }
-        
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
+            .form-grid {
+                grid-template-columns: 1fr;
             }
             
-            .step-indicator {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .step {
-                margin: 0.5rem 0;
-            }
-            
-            .form-row .col-md-6 {
-                max-width: 100%;
-                flex: 0 0 100%;
-            }
-            
-            .btn-navigation {
-                width: 100%;
-                margin-bottom: 0.5rem;
+            .form-container {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="registration-container">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="card registration-card">
-                        <div class="card-header">
-                            <h2>🎖️ Candidate Registration</h2>
-                            <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Defence Personnel Registration Portal</p>
+    <div class="container">
+        <div class="header">
+            <h2>Candidate Registration</h2>
+            <p>Indian Army - Join the Pride of the Nation</p>
+            <p>Service Before Self</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="post" enctype="multipart/form-data">
+                <!-- CSRF token would go here in Django -->
+                {% csrf_token %}
+                
+                <div class="army-symbol">
+                    <div class="symbol"></div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Login Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="username" class="required">Username</label>
+                            <input type="text" id="username" name="username" required>
                         </div>
                         
-                        <div class="card-body">
-                            <!-- Progress Bar -->
-                            <div class="progress">
-                                <div class="progress-bar" id="progressBar" style="width: 25%"></div>
-                            </div>
-                            
-                            <!-- Step Indicator -->
-                            <div class="step-indicator">
-                                <div class="step active" data-step="1">
-                                    <div class="step-number">1</div>
-                                    <div class="step-title">Basic Info</div>
-                                </div>
-                                <div class="step" data-step="2">
-                                    <div class="step-number">2</div>
-                                    <div class="step-title">Military Details</div>
-                                </div>
-                                <div class="step" data-step="3">
-                                    <div class="step-number">3</div>
-                                    <div class="step-title">Formation Info</div>
-                                </div>
-                                <div class="step" data-step="4">
-                                    <div class="step-number">4</div>
-                                    <div class="step-title">Qualification</div>
-                                </div>
-                            </div>
-
-                            <form method="post" enctype="multipart/form-data" id="registrationForm">
-                                {% csrf_token %}
-                                
-                                <!-- Step 1: Basic Information -->
-                                <div class="form-section active" id="step1">
-                                    <h3 class="section-title">Basic Information</h3>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_username">Username</label>
-                                                <input type="text" class="form-control" id="id_username" name="username" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_password">Password</label>
-                                                <input type="password" class="form-control" id="id_password" name="password" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_army_no">Army Number</label>
-                                                <input type="text" class="form-control" id="id_army_no" name="army_no" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_rank">Rank</label>
-                                                <input type="text" class="form-control" id="id_rank" name="rank" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_name">Full Name</label>
-                                                <input type="text" class="form-control" id="id_name" name="name" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_father_name">Father's Name</label>
-                                                <input type="text" class="form-control" id="id_father_name" name="father_name" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_dob">Date of Birth</label>
-                                                <input type="date" class="form-control" id="id_dob" name="dob" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_aadhar_number">Aadhar Number</label>
-                                                <input type="text" class="form-control" id="id_aadhar_number" name="aadhar_number" required maxlength="12">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Step 2: Military Details -->
-                                <div class="form-section" id="step2">
-                                    <h3 class="section-title">Military Details</h3>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_trade">Trade</label>
-                                                <input type="text" class="form-control" id="id_trade" name="trade" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_enrolment_no">Enrolment Number</label>
-                                                <input type="text" class="form-control" id="id_enrolment_no" name="enrolment_no" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_doe">Date of Enrolment</label>
-                                                <input type="date" class="form-control" id="id_doe" name="doe" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_unit">Unit</label>
-                                                <input type="text" class="form-control" id="id_unit" name="unit" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_trg_centre">Training Centre</label>
-                                                <input type="text" class="form-control" id="id_trg_centre" name="trg_centre">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_category">Category</label>
-                                                <select class="form-control" id="id_category" name="category" required>
-                                                    <option value="">Select Category</option>
-                                                    <option value="GEN">General</option>
-                                                    <option value="OBC">OBC</option>
-                                                    <option value="SC">SC</option>
-                                                    <option value="ST">ST</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Step 3: Formation Information -->
-                                <div class="form-section" id="step3">
-                                    <h3 class="section-title">Formation Information</h3>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_fmn_bde">Formation Brigade</label>
-                                                <input type="text" class="form-control" id="id_fmn_bde" name="fmn_bde">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_fmn_div">Formation Division</label>
-                                                <input type="text" class="form-control" id="id_fmn_div" name="fmn_div">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_fmn_corps">Formation Corps</label>
-                                                <input type="text" class="form-control" id="id_fmn_corps" name="fmn_corps">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_fmn_comd">Formation Command</label>
-                                                <input type="text" class="form-control" id="id_fmn_comd" name="fmn_comd">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_district">District</label>
-                                                <input type="text" class="form-control" id="id_district" name="district" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_state">State</label>
-                                                <input type="text" class="form-control" id="id_state" name="state" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label" for="id_center">Center</label>
-                                        <input type="text" class="form-control" id="id_center" name="center" required>
-                                    </div>
-                                </div>
-
-                                <!-- Step 4: Qualification & Documents -->
-                                <div class="form-section" id="step4">
-                                    <h3 class="section-title">Qualification & Documents</h3>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_qualification">Qualification</label>
-                                                <input type="text" class="form-control" id="id_qualification" name="qualification">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_level_of_qualification">Level of Qualification</label>
-                                                <input type="text" class="form-control" id="id_level_of_qualification" name="level_of_qualification">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_nsqf_level">NSQF Level</label>
-                                                <input type="text" class="form-control" id="id_nsqf_level" name="nsqf_level">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="id_skill">Skill</label>
-                                                <input type="text" class="form-control" id="id_skill" name="skill">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label" for="id_qf">QF</label>
-                                        <input type="text" class="form-control" id="id_qf" name="qf">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label" for="id_photograph">Photograph</label>
-                                        <div class="file-upload">
-                                            <input type="file" id="id_photograph" name="photograph" accept="image/*">
-                                            <label for="id_photograph" class="file-upload-label">
-                                                📷 Click to upload photograph
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Navigation Buttons -->
-                                <div class="form-group text-center" style="margin-top: 2rem;">
-                                    <button type="button" class="btn btn-secondary btn-navigation" id="prevBtn" onclick="changeStep(-1)" style="display: none;">Previous</button>
-                                    <button type="button" class="btn btn-primary btn-navigation" id="nextBtn" onclick="changeStep(1)">Next</button>
-                                    <button type="submit" class="btn btn-primary btn-navigation btn-lg" id="submitBtn" style="display: none;">
-                                        🎖️ Register Candidate
-                                    </button>
-                                </div>
-                            </form>
+                        <div class="form-group">
+                            <label for="password" class="required">Password</label>
+                            <input type="password" id="password" name="password" required>
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Personal Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="army_no" class="required">Army Number</label>
+                            <input type="text" id="army_no" name="army_no" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rank" class="required">Rank</label>
+                            <input type="text" id="rank" name="rank" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="name" class="required">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trade" class="required">Trade</label>
+                            <select id="trade" name="trade" required>
+                                <option value="">Select Trade</option>
+                                <option value="infantry">Infantry</option>
+                                <option value="artillery">Artillery</option>
+                                <option value="engineers">Engineers</option>
+                                <option value="signals">Signals</option>
+                                <option value="asc">Army Service Corps</option>
+                                <option value="ame">Army Medical Corps</option>
+                                <option value="aoc">Army Ordnance Corps</option>
+                                <option value="eme">Electrical and Mechanical Engineers</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dob" class="required">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="father_name" class="required">Father's Name</label>
+                            <input type="text" id="father_name" name="father_name" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Service Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="enrolment_no">Enrolment Number</label>
+                            <input type="text" id="enrolment_no" name="enrolment_no">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="doe" class="required">Date of Enrolment</label>
+                            <input type="date" id="doe" name="doe" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="aadhar_number">Aadhar Number</label>
+                            <input type="text" id="aadhar_number" name="aadhar_number" maxlength="12">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="unit" class="required">Unit</label>
+                            <input type="text" id="unit" name="unit" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fmn_bde">Formation (Bde)</label>
+                            <input type="text" id="fmn_bde" name="fmn_bde">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fmn_div">Formation (Div)</label>
+                            <input type="text" id="fmn_div" name="fmn_div">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fmn_corps">Formation (Corps)</label>
+                            <input type="text" id="fmn_corps" name="fmn_corps">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fmn_comd">Formation (Comd)</label>
+                            <input type="text" id="fmn_comd" name="fmn_comd">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="trg_centre">Training Centre</label>
+                            <input type="text" id="trg_centre" name="trg_centre">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Address Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" id="district" name="district">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Qualification Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="qualification" class="required">Qualification</label>
+                            <input type="text" id="qualification" name="qualification" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="level_of_qualification" class="required">Level of Qualification</label>
+                            <select id="level_of_qualification" name="level_of_qualification" required>
+                                <option value="">Select Level</option>
+                                <option value="10th">10th Standard</option>
+                                <option value="12th">12th Standard</option>
+                                <option value="diploma">Diploma</option>
+                                <option value="graduate">Graduate</option>
+                                <option value="post_graduate">Post Graduate</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nsqf_level" class="required">NSQF Level</label>
+                            <select id="nsqf_level" name="nsqf_level" required>
+                                <option value="">Select NSQF Level</option>
+                                <option value="1">Level 1</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                                <option value="4">Level 4</option>
+                                <option value="5">Level 5</option>
+                                <option value="6">Level 6</option>
+                                <option value="7">Level 7</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="skill" class="required">Skill</label>
+                            <input type="text" id="skill" name="skill" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="qf" class="required">QF</label>
+                            <input type="text" id="qf" name="qf" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">Examination Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="photograph">Photograph</label>
+                            <input type="file" id="photograph" name="photograph" accept="image/*">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="category" class="required">Category</label>
+                            <select id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="general">General</option>
+                                <option value="obc">OBC</option>
+                                <option value="sc">SC</option>
+                                <option value="st">ST</option>
+                                <option value="ews">EWS</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="center" class="required">Examination Center</label>
+                            <select id="center" name="center" required>
+                                <option value="">Select Center</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="mumbai">Mumbai</option>
+                                <option value="kolkata">Kolkata</option>
+                                <option value="chennai">Chennai</option>
+                                <option value="bangalore">Bangalore</option>
+                                <option value="hyderabad">Hyderabad</option>
+                                <option value="lucknow">Lucknow</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">Register</button>
+                
+                <p class="form-note">Fields marked with <span class="required">*</span> are mandatory</p>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Indian Army. All Rights Reserved.</p>
+            <p>Designed for the Brave Hearts of the Nation</p>
         </div>
     </div>
 
     <script>
-        let currentStep = 1;
-        const totalSteps = 4;
-
-        // Initialize form
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStepIndicator();
-            updateProgressBar();
-            
-            // File upload functionality
-            const fileInput = document.getElementById('id_photograph');
-            const fileLabel = document.querySelector('.file-upload-label');
-            
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const fileName = this.files[0].name;
-                    fileLabel.innerHTML = `📷 ${fileName}`;
-                    fileLabel.style.background = 'rgba(40, 167, 69, 0.1)';
-                    fileLabel.style.borderColor = '#28a745';
-                    fileLabel.style.color = '#28a745';
-                }
-            });
-            
-            // Add form validation
-            addFormValidation();
-        });
-
-        function changeStep(direction) {
-            const currentSection = document.getElementById(`step${currentStep}`);
-            
-            // Validate current step before moving forward
-            if (direction > 0 && !validateCurrentStep()) {
-                return;
-            }
-            
-            // Hide current step
-            currentSection.classList.remove('active');
-            
-            // Update step number
-            currentStep += direction;
-            
-            // Show new step
-            const newSection = document.getElementById(`step${currentStep}`);
-            newSection.classList.add('active');
-            
-            // Update UI elements
-            updateStepIndicator();
-            updateProgressBar();
-            updateButtons();
-            
-            // Scroll to top of form
-            document.querySelector('.card-body').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function updateStepIndicator() {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((step, index) => {
-                const stepNumber = index + 1;
-                step.classList.remove('active', 'completed');
-                
-                if (stepNumber === currentStep) {
-                    step.classList.add('active');
-                } else if (stepNumber < currentStep) {
-                    step.classList.add('completed');
-                    step.querySelector('.step-number').innerHTML = '✓';
-                } else {
-                    step.querySelector('.step-number').innerHTML = stepNumber;
-                }
-            });
-        }
-
-        function updateProgressBar() {
-            const progress = (currentStep / totalSteps) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
-        }
-
-        function updateButtons() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Show/hide previous button
-            prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
-            
-            // Show/hide next and submit buttons
-            if (currentStep < totalSteps) {
-                nextBtn.style.display = 'inline-block';
-                submitBtn.style.display = 'none';
-            } else {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'inline-block';
-            }
-        }
-
-        function validateCurrentStep() {
-            const currentSection = document.getElementById(`step${currentStep}`);
-            const requiredInputs = currentSection.querySelectorAll('input[required], select[required]');
+        // Basic form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
             let isValid = true;
+            const requiredFields = this.querySelectorAll('[required]');
             
-            requiredInputs.forEach(input => {
-                if (!input.value.trim()) {
-                    showFieldError(input, 'This field is required');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
                     isValid = false;
+                    field.style.borderColor = 'red';
                 } else {
-                    clearFieldError(input);
-                    
-                    // Additional validation
-                    if (input.type === 'email' && !isValidEmail(input.value)) {
-                        showFieldError(input, 'Please enter a valid email');
-                        isValid = false;
-                    } else if (input.name === 'aadhar_number' && !isValidAadhar(input.value)) {
-                        showFieldError(input, 'Please enter a valid 12-digit Aadhar number');
-                        isValid = false;
-                    }
+                    field.style.borderColor = '';
                 }
             });
             
-            return isValid;
-        }
-
-        function showFieldError(input, message) {
-            clearFieldError(input);
-            input.style.borderColor = '#dc3545';
-            input.style.boxShadow = '0 0 0 0.2rem rgba(220, 53, 69, 0.25)';
-            
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'field-error';
-            errorDiv.style.color = '#dc3545';
-            errorDiv.style.fontSize = '0.875rem';
-            errorDiv.style.marginTop = '0.25rem';
-            errorDiv.textContent = message;
-            
-            input.parentNode.appendChild(errorDiv);
-        }
-
-        function clearFieldError(input) {
-            input.style.borderColor = '';
-            input.style.boxShadow = '';
-            const existingError = input.parentNode.querySelector('.field-error');
-            if (existingError) {
-                existingError.remove();
-            }
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        function isValidAadhar(aadhar) {
-            return /^\d{12}$/.test(aadhar);
-        }
-
-        function addFormValidation() {
-            // Real-time validation
-            const inputs = document.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                input.addEventListener('blur', function() {
-                    if (this.hasAttribute('required') && !this.value.trim()) {
-                        showFieldError(this, 'This field is required');
-                    } else {
-                        clearFieldError(this);
-                    }
-                });
-                
-                input.addEventListener('input', function() {
-                    if (this.value.trim()) {
-                        clearFieldError(this);
-                    }
-                });
-            });
-            
-            // Form submission
-            document.getElementById('registrationForm').addEventListener('submit', function(e) {
-                if (!validateAllSteps()) {
-                    e.preventDefault();
-                    showNotification('Please fill all required fields correctly', 'error');
-                } else {
-                    showNotification('Registration submitted successfully!', 'success');
-                }
-            });
-        }
-
-        function validateAllSteps() {
-            let allValid = true;
-            for (let step = 1; step <= totalSteps; step++) {
-                const section = document.getElementById(`step${step}`);
-                const requiredInputs = section.querySelectorAll('input[required], select[required]');
-                
-                requiredInputs.forEach(input => {
-                    if (!input.value.trim()) {
-                        allValid = false;
-                    }
-                });
-            }
-            return allValid;
-        }
-
-        function showNotification(message, type) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 10px;
-                color: white;
-                font-weight: 600;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            `;
-            
-            if (type === 'success') {
-                notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-                notification.innerHTML = `✅ ${message}`;
-            } else {
-                notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
-                notification.innerHTML = `❌ ${message}`;
-            }
-            
-            document.body.appendChild(notification);
-            
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Add animation styles
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-            
-            .form-control:invalid {
-                border-color: #dc3545;
-            }
-            
-            .form-control:valid {
-                border-color: #28a745;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            if (!isValid) {
                 e.preventDefault();
-                if (currentStep < totalSteps) {
-                    changeStep(1);
-                }
+                alert('Please fill all required fields.');
             }
         });
-
-        // Auto-focus first input of each step
-        function focusFirstInput(step) {
-            setTimeout(() => {
-                const firstInput = document.querySelector(`#step${step} input:not([type="hidden"]), #step${step} select`);
-                if (firstInput) {
-                    firstInput.focus();
-                }
-            }, 100);
-        }
-
-        // Initialize first input focus
-        focusFirstInput(1);
     </script>
 </body>
-</html>"
+</html>
