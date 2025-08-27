@@ -9,10 +9,20 @@ def register_candidate(request):
         if form.is_valid():
             form.save()
             print("Form is valid and saved")
-            return redirect("registration_success")  # Define this URL/view
+            return redirect("login")  # Define this URL/view
         else:
             print("error")
     else:
         print("invalid")
         form = CandidateRegistrationForm()
     return render(request, "registration/register_candidate.html", {"form": form})
+
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def candidate_dashboard(request):
+    return render(request, "registration/dashboard.html", {
+        "user": request.user
+    })
