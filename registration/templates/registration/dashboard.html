@@ -72,8 +72,57 @@
             border-bottom: 2px solid #9acd32;
             padding-bottom: 5px;
         }
-        ul {
-            list-style-type: square;
+
+        /* Common exam/result styling */
+        .exam-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .exam-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            padding: 5px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+        .exam-detail:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: bold;
+            color: #9acd32;
+        }
+        .value {
+            color: #f0f0f0;
+        }
+        .exam-action {
+            margin-top: 15px;
+            text-align: right;
+        }
+        .start-btn {
+            background: #9acd32;
+            color: #000;
+            font-weight: bold;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .start-btn:hover {
+            background: #82b62a;
+        }
+        .start-btn.disabled {
+            background: gray;
+            color: #ccc;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -82,7 +131,8 @@
         <header>
             <div class="welcome">Welcome, {{ candidate.name }}</div>
             <div class="profile">
-                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile">
+                <img src="{% static 'registration/profile.png' %}" alt="Profile">
+
                 <div class="profile-details">
                     <p><strong>Name:</strong> {{ candidate.name }}</p>
                     <p><strong>Army No:</strong> {{ candidate.army_no }}</p>
@@ -93,46 +143,73 @@
         </header>
 
         <div class="dashboard-section">
+            <!-- Scheduled Exams -->
             <div class="card">
-    <h2>Scheduled Exams</h2>
-    
-        <ul>
-            
-                <li>
-                    <strong>Category:</strong> {{ candidate.category }} <br>
-                    <strong>Center:</strong> {{ candidate.center }} <br>
-                    <strong>Shift:</strong> {{ candidate.shift }} <br>
-                    {% if candidate.can_start_exam %}
-        <a href="{% url 'exam_interface' %}" class="start-btn">Start Exam</a>
-    {% else %}
-        <button class="start-btn" disabled>Start Exam (Not Yet Available)</button>
-    {% endif %}
-                </li>
-            
-        </ul>
-    
-</div>
+                <h2>Scheduled Exams</h2>
+                {% if candidate %}
+                <div class="exam-card">
+                    <div class="exam-detail">
+                        <span class="label">Category:</span>
+                        <span class="value">{{ candidate.category }}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <span class="label">Center:</span>
+                        <span class="value">{{ candidate.center }}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <span class="label">Shift:</span>
+                        <span class="value">{{ candidate.shift }}</span>
+                    </div>
+                    <div class="exam-action">
+                        {% if candidate.can_start_exam %}
+                            <a href="{% url 'exam_interface' %}" class="start-btn">Start Exam</a>
+                        {% else %}
+                            <button class="start-btn disabled" disabled>Start Exam (Not Yet Available)</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                    <p>No scheduled exams</p>
+                {% endif %}
+            </div>
+
+            <!-- Completed Exams -->
             <div class="card">
                 <h2>Completed Exams</h2>
                 {% if completed_exams %}
-                    <ul>
-                        {% for exam in completed_exams %}
-                            <li>{{ exam.name }} - {{ exam.date }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for exam in completed_exams %}
+                    <div class="exam-card">
+                        <div class="exam-detail">
+                            <span class="label">Exam:</span>
+                            <span class="value">{{ exam.name }}</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="label">Date:</span>
+                            <span class="value">{{ exam.date }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
                 {% else %}
                     <p>No completed exams</p>
                 {% endif %}
             </div>
 
+            <!-- Results -->
             <div class="card">
                 <h2>Results</h2>
                 {% if results %}
-                    <ul>
-                        {% for result in results %}
-                            <li>{{ result.exam_name }} - Score: {{ result.score }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for result in results %}
+                    <div class="exam-card">
+                        <div class="exam-detail">
+                            <span class="label">Exam:</span>
+                            <span class="value">{{ result.exam_name }}</span>
+                        </div>
+                        <div class="exam-detail">
+                            <span class="label">Score:</span>
+                            <span class="value">{{ result.score }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
                 {% else %}
                     <p>No results available</p>
                 {% endif %}
