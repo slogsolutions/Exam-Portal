@@ -1,485 +1,164 @@
+<!-- <h2>Candidate Registration</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Register</button>
+</form>  -->
+
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Army - Candidate Registration</title>
-    <style>
-        :root {
-            --army-green: #2C5F2D;
-            --army-dark-green: #1E3A1F;
-            --army-gold: #FFD700;
-            --army-tan: #C19A6B;
-            --army-light: #F8F4E3;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%232C5F2D" fill-opacity="0.05" width="100" height="100"/></svg>');
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            background: linear-gradient(135deg, var(--army-green) 0%, var(--army-dark-green) 100%);
-            color: white;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path fill="%23FFD700" fill-opacity="0.1" d="M0 0h40v40H0z"/><path fill="%23FFFFFF" fill-opacity="0.1" d="M0 0l40 40M40 0L0 40"/></svg>');
-            z-index: 1;
-        }
-        
-        .header h2 {
-            position: relative;
-            z-index: 2;
-            font-size: 28px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .header p {
-            position: relative;
-            z-index: 2;
-            font-size: 16px;
-            margin-bottom: 5px;
-            opacity: 0.9;
-        }
-        
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--army-tan);
-        }
-        
-        .section-title {
-            color: var(--army-dark-green);
-            font-size: 20px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--army-gold);
-            display: flex;
-            align-items: center;
-        }
-        
-        .section-title::before {
-            content: "■";
-            color: var(--army-green);
-            margin-right: 10px;
-            font-size: 24px;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--army-dark-green);
-            font-size: 15px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--army-green);
-            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
-        }
-        
-        .required::after {
-            content: " *";
-            color: #e22;
-        }
-        
-        .btn-submit {
-            background: linear-gradient(135deg, var(--army-green) 0%, var(--army-dark-green) 100%);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 18px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 30px auto 10px;
-            min-width: 200px;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, var(--army-dark-green) 0%, var(--army-green) 100%);
-        }
-        
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-        
-        .form-note {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-        
-        .army-symbol {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        
-        .symbol {
-            width: 60px;
-            height: 60px;
-            background-color: var(--army-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 0 10px;
-        }
-        
-        .symbol::before {
-            content: "✯";
-            font-size: 30px;
-            color: var(--army-dark-green);
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Candidate Registration | Indian Army</title>
+  <!-- Offline Bootstrap -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #001f12, #003d26, #0a5c39);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Segoe UI", sans-serif;
+    }
+    .registration-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 40px;
+      width: 95%;
+      max-width: 950px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+    }
+    .registration-card h2 {
+      color: #f9d342;
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px rgba(249,211,66,0.7);
+    }
+    .section-title {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #9cd67e;
+      border-bottom: 2px solid #2f4d37;
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-label {
+      font-weight: 500;
+      color: #eaeaea;
+    }
+    .form-control, .form-select {
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      border-radius: 10px;
+      transition: 0.3s ease-in-out;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: rgba(255,255,255,0.15);
+      border-color: #f9d342;
+      box-shadow: 0 0 8px rgba(249,211,66,0.7);
+      color: #fff;
+    }
+    .btn-register {
+      background: linear-gradient(90deg, #f9d342, #d6b131);
+      border: none;
+      font-weight: 700;
+      color: #000;
+      border-radius: 12px;
+      padding: 14px;
+      width: 100%;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+    .btn-register:hover {
+      background: linear-gradient(90deg, #ffe066, #f9d342);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(249,211,66,0.5);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>Candidate Registration</h2>
-            <p>Indian Army - Join the Pride of the Nation</p>
-            <p>Service Before Self</p>
-        </div>
-        
-        <div class="form-container">
-            <form method="post" enctype="multipart/form-data">
-                <!-- CSRF token would go here in Django -->
-                {% csrf_token %}
-                
-                <div class="army-symbol">
-                    <div class="symbol"></div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Login Information</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="username" class="required">Username</label>
-                            <input type="text" id="username" name="username" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="password" class="required">Password</label>
-                            <input type="password" id="password" name="password" required>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Personal Details</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="army_no" class="required">Army Number</label>
-                            <input type="text" id="army_no" name="army_no" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="rank" class="required">Rank</label>
-                            <input type="text" id="rank" name="rank" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="name" class="required">Full Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="trade" class="required">Trade</label>
-                            <select id="trade" name="trade" required>
-                                <option value="">Select Trade</option>
-                                <option value="infantry">Infantry</option>
-                                <option value="artillery">Artillery</option>
-                                <option value="engineers">Engineers</option>
-                                <option value="signals">Signals</option>
-                                <option value="asc">Army Service Corps</option>
-                                <option value="ame">Army Medical Corps</option>
-                                <option value="aoc">Army Ordnance Corps</option>
-                                <option value="eme">Electrical and Mechanical Engineers</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dob" class="required">Date of Birth</label>
-                            <input type="date" id="dob" name="dob" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="father_name" class="required">Father's Name</label>
-                            <input type="text" id="father_name" name="father_name" required>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Service Details</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="enrolment_no">Enrolment Number</label>
-                            <input type="text" id="enrolment_no" name="enrolment_no">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="doe" class="required">Date of Enrolment</label>
-                            <input type="date" id="doe" name="doe" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="aadhar_number">Aadhar Number</label>
-                            <input type="text" id="aadhar_number" name="aadhar_number" maxlength="12">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="unit" class="required">Unit</label>
-                            <input type="text" id="unit" name="unit" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="fmn_bde">Formation (Bde)</label>
-                            <input type="text" id="fmn_bde" name="fmn_bde">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="fmn_div">Formation (Div)</label>
-                            <input type="text" id="fmn_div" name="fmn_div">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="fmn_corps">Formation (Corps)</label>
-                            <input type="text" id="fmn_corps" name="fmn_corps">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="fmn_comd">Formation (Comd)</label>
-                            <input type="text" id="fmn_comd" name="fmn_comd">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="trg_centre">Training Centre</label>
-                            <input type="text" id="trg_centre" name="trg_centre">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Address Details</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="district">District</label>
-                            <input type="text" id="district" name="district">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="state">State</label>
-                            <input type="text" id="state" name="state">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Qualification Details</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="qualification" class="required">Qualification</label>
-                            <input type="text" id="qualification" name="qualification" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="level_of_qualification" class="required">Level of Qualification</label>
-                            <select id="level_of_qualification" name="level_of_qualification" required>
-                                <option value="">Select Level</option>
-                                <option value="10th">10th Standard</option>
-                                <option value="12th">12th Standard</option>
-                                <option value="diploma">Diploma</option>
-                                <option value="graduate">Graduate</option>
-                                <option value="post_graduate">Post Graduate</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="nsqf_level" class="required">NSQF Level</label>
-                            <select id="nsqf_level" name="nsqf_level" required>
-                                <option value="">Select NSQF Level</option>
-                                <option value="1">Level 1</option>
-                                <option value="2">Level 2</option>
-                                <option value="3">Level 3</option>
-                                <option value="4">Level 4</option>
-                                <option value="5">Level 5</option>
-                                <option value="6">Level 6</option>
-                                <option value="7">Level 7</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="skill" class="required">Skill</label>
-                            <input type="text" id="skill" name="skill" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="qf" class="required">QF</label>
-                            <input type="text" id="qf" name="qf" required>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="section-title">Examination Details</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="photograph">Photograph</label>
-                            <input type="file" id="photograph" name="photograph" accept="image/*">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="category" class="required">Category</label>
-                            <select id="category" name="category" required>
-                                <option value="">Select Category</option>
-                                <option value="general">General</option>
-                                <option value="obc">OBC</option>
-                                <option value="sc">SC</option>
-                                <option value="st">ST</option>
-                                <option value="ews">EWS</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="center" class="required">Examination Center</label>
-                            <select id="center" name="center" required>
-                                <option value="">Select Center</option>
-                                <option value="delhi">Delhi</option>
-                                <option value="mumbai">Mumbai</option>
-                                <option value="kolkata">Kolkata</option>
-                                <option value="chennai">Chennai</option>
-                                <option value="bangalore">Bangalore</option>
-                                <option value="hyderabad">Hyderabad</option>
-                                <option value="lucknow">Lucknow</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn-submit">Register</button>
-                
-                <p class="form-note">Fields marked with <span class="required">*</span> are mandatory</p>
-            </form>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 Indian Army. All Rights Reserved.</p>
-            <p>Designed for the Brave Hearts of the Nation</p>
-        </div>
-    </div>
+  <div class="registration-card">
+    <h2>🇮🇳 Candidate Registration</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
 
-    <script>
-        // Basic form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            let isValid = true;
-            const requiredFields = this.querySelectorAll('[required]');
-            
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    isValid = false;
-                    field.style.borderColor = 'red';
-                } else {
-                    field.style.borderColor = '';
-                }
-            });
-            
-            if (!isValid) {
-                e.preventDefault();
-                alert('Please fill all required fields.');
-            }
-        });
-    </script>
+      <!-- Account Info -->
+      <div class="section-title">👤 Account Information</div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Username</label>
+          {{ form.username }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Password</label>
+          {{ form.password }}
+        </div>
+      </div>
+
+      <!-- Personal Details -->
+      <div class="section-title">📌 Personal Details</div>
+      <div class="row g-3">
+        <div class="col-md-4">{{ form.army_no.label_tag }} {{ form.army_no }}</div>
+        <div class="col-md-4">{{ form.rank.label_tag }} {{ form.rank }}</div>
+        <div class="col-md-4">{{ form.name.label_tag }} {{ form.name }}</div>
+        <div class="col-md-6">{{ form.trade.label_tag }} {{ form.trade }}</div>
+        <div class="col-md-6">{{ form.dob.label_tag }} {{ form.dob }}</div>
+        <div class="col-md-6">{{ form.father_name.label_tag }} {{ form.father_name }}</div>
+        <div class="col-md-6">{{ form.enrolment_no.label_tag }} {{ form.enrolment_no }}</div>
+        <div class="col-md-6">{{ form.doe.label_tag }} {{ form.doe }}</div>
+        <div class="col-md-6">{{ form.aadhar_number.label_tag }} {{ form.aadhar_number }}</div>
+        <div class="col-md-6">{{ form.unit.label_tag }} {{ form.unit }}</div>
+        <div class="col-md-6">{{ form.trg_centre.label_tag }} {{ form.trg_centre }}</div>
+      </div>
+
+      <!-- Formation Details -->
+      <div class="section-title">🏰 Formation Details</div>
+      <div class="row g-3">
+        <div class="col-md-3">{{ form.fmn_bde.label_tag }} {{ form.fmn_bde }}</div>
+        <div class="col-md-3">{{ form.fmn_div.label_tag }} {{ form.fmn_div }}</div>
+        <div class="col-md-3">{{ form.fmn_corps.label_tag }} {{ form.fmn_corps }}</div>
+        <div class="col-md-3">{{ form.fmn_comd.label_tag }} {{ form.fmn_comd }}</div>
+      </div>
+
+      <!-- Education -->
+      <div class="section-title">🎓 Education & Skills</div>
+      <div class="row g-3">
+        <div class="col-md-4">{{ form.qualification.label_tag }} {{ form.qualification }}</div>
+        <div class="col-md-4">{{ form.level_of_qualification.label_tag }} {{ form.level_of_qualification }}</div>
+        <div class="col-md-4">{{ form.nsqf_level.label_tag }} {{ form.nsqf_level }}</div>
+        <div class="col-md-6">{{ form.skill.label_tag }} {{ form.skill }}</div>
+        <div class="col-md-6">{{ form.qf.label_tag }} {{ form.qf }}</div>
+      </div>
+
+      <!-- Exam -->
+      <div class="section-title">📝 Exam Details</div>
+      <div class="row g-3">
+        <div class="col-md-6">{{ form.category.label_tag }} {{ form.category }}</div>
+        <div class="col-md-6">{{ form.center.label_tag }} {{ form.center }}</div>
+        <div class="col-md-6">{{ form.district.label_tag }} {{ form.district }}</div>
+        <div class="col-md-6">{{ form.state.label_tag }} {{ form.state }}</div>
+        <div class="col-md-6">{{ form.photograph.label_tag }} {{ form.photograph }}</div>
+      </div>
+
+      <!-- Button -->
+      <div class="mt-4">
+        <button type="submit" class="btn btn-register">🚀 Register Candidate</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
