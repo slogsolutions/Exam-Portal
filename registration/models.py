@@ -1,17 +1,14 @@
 from django.db import models
-
-# Create your models here.
-# registration/models.py
-from django.db import models
 from django.conf import settings
 from reference.models import Trade, Level, Skill, QF, Qualification, Category
 from centers.models import Center
+from exams.models import Shift   # ✅ Import Shift
+from django.utils import timezone
+from datetime import datetime
 
 class CandidateProfile(models.Model):
-    # link to auth user (for login during exam)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="candidate_profile")
 
-    # Required window fields
     army_no = models.CharField(max_length=50, unique=True)
     rank = models.CharField(max_length=50)
     name = models.CharField(max_length=150)
@@ -28,7 +25,6 @@ class CandidateProfile(models.Model):
     fmn_comd = models.CharField("Fmn (Comd)", max_length=120, blank=True)
     trg_centre = models.CharField("Training Centre", max_length=150, blank=True)
 
-    # Additional fixed fields for reports
     district = models.CharField(max_length=100, blank=True)
     state = models.CharField(max_length=100, blank=True)
 
@@ -38,14 +34,22 @@ class CandidateProfile(models.Model):
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT)
     qf = models.ForeignKey(QF, on_delete=models.PROTECT)
 
-    photograph = models.ImageField(upload_to="photos/", blank=True, null=True)  # Physical paste after report also allowed
+    photograph = models.ImageField(upload_to="photos/", blank=True, null=True)
 
-    # Exam mapping
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)  # one of 14
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     center = models.ForeignKey(Center, on_delete=models.PROTECT)
+    shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True)   # ✅ New Field
 
-    # primary (trade-specific) paper is assigned via exams.ExamAssignment later
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    @property
+    def can_start_exam(self):
+        if not self.shift:
+            return False
+        shift_datetime = datetime.combine(self.shift.date, self.shift.start_time)
+        shift_datetime = timezone.make_aware(shift_datetime, timezone.get_current_timezone())
+        return timezone.now() >= shift_datetime
 
     def __str__(self):
         return f"{self.army_no} - {self.name}"
