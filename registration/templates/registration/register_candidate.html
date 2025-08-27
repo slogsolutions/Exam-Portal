@@ -1,10 +1,3 @@
-<!-- <h2>Candidate Registration</h2>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>  -->
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -16,149 +9,595 @@
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
   <style>
+    :root {
+      --primary: #2f4a34;
+      --primary-light: #a3b18a;
+      --primary-dark: #1e2e22;
+      --accent: #3d5a40;
+      --light-bg: #f8faf7;
+      --border: #dce5da;
+    }
+    
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #001f12, #003d26, #0a5c39);
+      background: linear-gradient(135deg, #f5f7f3 0%, #e8efe5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "Segoe UI", sans-serif;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      padding: 20px;
+      font-size: 1.1rem; /* Increased base font size for attractiveness */
     }
-    .registration-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 40px;
-      width: 95%;
-      max-width: 950px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+    
+    .registration-container {
+      width: 100%;
+      max-width: 1200px;
     }
-    .registration-card h2 {
-      color: #f9d342;
+    
+    .registration-header {
       text-align: center;
-      font-weight: 700;
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px rgba(249,211,66,0.7);
+      margin-bottom: 30px;
     }
-    .section-title {
-      margin-top: 30px;
+    
+    .registration-header h1 {
+      color: var(--primary-dark);
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+    }
+    
+    .registration-header p {
+      color: #6a7b6c;
+      font-size: 1.1rem;
+    }
+    
+    .progress-container {
+      margin-bottom: 40px;
+    }
+    
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
       margin-bottom: 20px;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #9cd67e;
-      border-bottom: 2px solid #2f4d37;
-      padding-bottom: 6px;
+    }
+    
+    .progress-steps::before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: #e9ecef;
+      z-index: 1;
+    }
+    
+    .progress-bar {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      z-index: 2;
+      width: 25%; /* Initially at step 1 */
+      transition: width 0.5s ease;
+    }
+    
+    .step {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      width: 70px;
+    }
+    
+    .step-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background-color: white;
+      border: 4px solid #e9ecef;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-    .form-label {
-      font-weight: 500;
-      color: #eaeaea;
-    }
-    .form-control, .form-select {
-      background-color: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #fff;
-      border-radius: 10px;
-      transition: 0.3s ease-in-out;
-    }
-    .form-control:focus, .form-select:focus {
-      background-color: rgba(255,255,255,0.15);
-      border-color: #f9d342;
-      box-shadow: 0 0 8px rgba(249,211,66,0.7);
-      color: #fff;
-    }
-    .btn-register {
-      background: linear-gradient(90deg, #f9d342, #d6b131);
-      border: none;
+      justify-content: center;
+      margin: 0 auto 8px;
       font-weight: 700;
-      color: #000;
-      border-radius: 12px;
-      padding: 14px;
-      width: 100%;
-      transition: 0.3s;
-      letter-spacing: 0.5px;
+      color: #6c757d;
     }
-    .btn-register:hover {
-      background: linear-gradient(90deg, #ffe066, #f9d342);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 20px rgba(249,211,66,0.5);
+    
+    .step.active .step-number {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
     }
+    
+    .step-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #6c757d;
+    }
+    
+    .step.active .step-label {
+      color: var(--primary-dark);
+    }
+    
+    .registration-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .form-section {
+      display: none;
+    }
+    
+    .form-section.active {
+      display: block;
+    }
+    
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 25px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    
+    .form-label {
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1.1rem; /* Increased font size for labels */
+    }
+    
+    .form-control, .form-select {
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 2px solid #cbd5c0;
+      background-color: #f8faf7;
+      transition: all 0.2s;
+      font-size: 1.05rem; /* Increased font size for inputs */
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(61, 90, 64, 0.15);
+    }
+    
+    .input-hint {
+      font-size: 0.85rem;
+      color: #6a7b6c;
+      margin-top: 5px;
+    }
+    
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .btn {
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: all 0.3s;
+      font-size: 1.1rem; /* Increased button font size */
+    }
+    
+    .btn-prev {
+      background-color: white;
+      border: 2px solid var(--primary-light);
+      color: var(--primary);
+    }
+    
+    .btn-prev:hover {
+      background-color: #eef3ed;
+      border-color: var(--primary);
+    }
+    
+    .btn-next, .btn-submit {
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      border: none;
+      color: white;
+    }
+    
+    .btn-next:hover, .btn-submit:hover {
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(61, 90, 64, 0.2);
+    }
+    
+    /* Error styles */
+    .has-error .form-control, .has-error .form-select {
+      border-color: #dc3545;
+    }
+    
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      padding: 8px 12px;
+      background-color: rgba(220, 53, 69, 0.08);
+      border-radius: 6px;
+    }
+    
+    .alert-errors {
+      border-left: 4px solid #dc3545;
+      margin-bottom: 25px;
+    }
+    
+    /* Make fields appear on the right of labels (already handled by Bootstrap grid) */
   </style>
 </head>
 <body>
-  <div class="registration-card">
-    <h2>🇮🇳 Candidate Registration</h2>
-    <form method="post" enctype="multipart/form-data">
+  <div class="registration-container">
+    <div class="registration-header">
+      <h1>ARMY CANDIDATE REGISTRATION</h1>
+      <p>Defence Personnel Registration Portal</p>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-steps">
+        <div class="progress-bar"></div>
+        <div class="step active">
+          <div class="step-number">1</div>
+          <div class="step-label">Account Info</div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-label">Personal Details</div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-label">Formation Details</div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-label">Education & Exam</div>
+        </div>
+      </div>
+    </div>
+    
+    {# Non-field errors (form-wide) #}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger alert-errors" role="alert">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
-
-      <!-- Account Info -->
-      <div class="section-title">👤 Account Information</div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Username</label>
-          {{ form.username }}
+      
+      <div class="registration-card">
+        <!-- Section 1: Account Information -->
+        <div class="form-section active" id="section-1">
+          <h2 class="section-title">Account Information</h2>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.username.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.username.id_for_label }}"><span>🔐</span> Username *</label>
+              {{ form.username }}
+              {% if form.username.errors %}
+                <div class="invalid-feedback d-block">{{ form.username.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.password.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.password.id_for_label }}"><span>🔒</span> Password *</label>
+              {{ form.password }}
+              {% if form.password.errors %}
+                <div class="invalid-feedback d-block">{{ form.password.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="btn-container">
+            <div></div> <!-- Empty div for spacing -->
+            <button type="button" class="btn btn-next" onclick="showSection(2)">Next</button>
+          </div>
         </div>
-        <div class="col-md-6">
-          <label class="form-label">Password</label>
-          {{ form.password }}
+        
+        <!-- Section 2: Personal Details -->
+        <div class="form-section" id="section-2">
+          <h2 class="section-title">Personal Details</h2>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.army_no.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.army_no.id_for_label }}"><span>🎖</span> Army Number *</label>
+              {{ form.army_no }}
+              {% if form.army_no.errors %}
+                <div class="invalid-feedback d-block">{{ form.army_no.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.rank.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.rank.id_for_label }}"><span>⭐</span> Rank *</label>
+              {{ form.rank }}
+              {% if form.rank.errors %}
+                <div class="invalid-feedback d-block">{{ form.rank.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.name.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.name.id_for_label }}"><span>👤</span> Full Name *</label>
+              {{ form.name }}
+              {% if form.name.errors %}
+                <div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.trade.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.trade.id_for_label }}"><span>🔧</span> Trade *</label>
+              {{ form.trade }}
+              {% if form.trade.errors %}
+                <div class="invalid-feedback d-block">{{ form.trade.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.dob.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.dob.id_for_label }}"><span>📅</span> Date of Birth *</label>
+              {{ form.dob }}
+              <div class="input-hint">yyyy-mm-dd</div>
+              {% if form.dob.errors %}
+                <div class="invalid-feedback d-block">{{ form.dob.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.father_name.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.father_name.id_for_label }}"><span>👨</span> Father's Name *</label>
+              {{ form.father_name }}
+              {% if form.father_name.errors %}
+                <div class="invalid-feedback d-block">{{ form.father_name.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.enrolment_no.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.enrolment_no.id_for_label }}"><span>🆔</span> Enrolment Number *</label>
+              {{ form.enrolment_no }}
+              {% if form.enrolment_no.errors %}
+                <div class="invalid-feedback d-block">{{ form.enrolment_no.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.doe.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.doe.id_for_label }}"><span>📆</span> Date of Enrolment *</label>
+              {{ form.doe }}
+              <div class="input-hint">dd-mm-yyyy</div>
+              {% if form.doe.errors %}
+                <div class="invalid-feedback d-block">{{ form.doe.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.aadhar_number.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.aadhar_number.id_for_label }}"><span>🪪</span> Aadhar Number *</label>
+              {{ form.aadhar_number }}
+              <div class="input-hint">12-digit Aadhar number</div>
+              {% if form.aadhar_number.errors %}
+                <div class="invalid-feedback d-block">{{ form.aadhar_number.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.unit.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.unit.id_for_label }}"><span>🏢</span> Unit *</label>
+              {{ form.unit }}
+              {% if form.unit.errors %}
+                <div class="invalid-feedback d-block">{{ form.unit.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 {% if form.trg_centre.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.trg_centre.id_for_label }}"><span>🎓</span> Training Centre *</label>
+              {{ form.trg_centre }}
+              {% if form.trg_centre.errors %}
+                <div class="invalid-feedback d-block">{{ form.trg_centre.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="btn-container">
+            <button type="button" class="btn btn-prev" onclick="showSection(1)">Previous</button>
+            <button type="button" class="btn btn-next" onclick="showSection(3)">Next</button>
+          </div>
         </div>
-      </div>
-
-      <!-- Personal Details -->
-      <div class="section-title">📌 Personal Details</div>
-      <div class="row g-3">
-        <div class="col-md-4">{{ form.army_no.label_tag }} {{ form.army_no }}</div>
-        <div class="col-md-4">{{ form.rank.label_tag }} {{ form.rank }}</div>
-        <div class="col-md-4">{{ form.name.label_tag }} {{ form.name }}</div>
-        <div class="col-md-6">{{ form.trade.label_tag }} {{ form.trade }}</div>
-        <div class="col-md-6">{{ form.dob.label_tag }} {{ form.dob }}</div>
-        <div class="col-md-6">{{ form.father_name.label_tag }} {{ form.father_name }}</div>
-        <div class="col-md-6">{{ form.enrolment_no.label_tag }} {{ form.enrolment_no }}</div>
-        <div class="col-md-6">{{ form.doe.label_tag }} {{ form.doe }}</div>
-        <div class="col-md-6">{{ form.aadhar_number.label_tag }} {{ form.aadhar_number }}</div>
-        <div class="col-md-6">{{ form.unit.label_tag }} {{ form.unit }}</div>
-        <div class="col-md-6">{{ form.trg_centre.label_tag }} {{ form.trg_centre }}</div>
-      </div>
-
-      <!-- Formation Details -->
-      <div class="section-title">🏰 Formation Details</div>
-      <div class="row g-3">
-        <div class="col-md-3">{{ form.fmn_bde.label_tag }} {{ form.fmn_bde }}</div>
-        <div class="col-md-3">{{ form.fmn_div.label_tag }} {{ form.fmn_div }}</div>
-        <div class="col-md-3">{{ form.fmn_corps.label_tag }} {{ form.fmn_corps }}</div>
-        <div class="col-md-3">{{ form.fmn_comd.label_tag }} {{ form.fmn_comd }}</div>
-      </div>
-
-      <!-- Education -->
-      <div class="section-title">🎓 Education & Skills</div>
-      <div class="row g-3">
-        <div class="col-md-4">{{ form.qualification.label_tag }} {{ form.qualification }}</div>
-        <div class="col-md-4">{{ form.level_of_qualification.label_tag }} {{ form.level_of_qualification }}</div>
-        <div class="col-md-4">{{ form.nsqf_level.label_tag }} {{ form.nsqf_level }}</div>
-        <div class="col-md-6">{{ form.skill.label_tag }} {{ form.skill }}</div>
-        <div class="col-md-6">{{ form.qf.label_tag }} {{ form.qf }}</div>
-      </div>
-
-      <!-- Exam -->
-      <div class="section-title">📝 Exam Details</div>
-      <div class="row g-3">
-        <div class="col-md-6">{{ form.category.label_tag }} {{ form.category }}</div>
-        <div class="col-md-6">{{ form.center.label_tag }} {{ form.center }}</div>
-        <div class="col-md-6">{{ form.district.label_tag }} {{ form.district }}</div>
-        <div class="col-md-6">{{ form.state.label_tag }} {{ form.state }}</div>
-        <div class="col-md-6">{{ form.photograph.label_tag }} {{ form.photograph }}</div>
-      </div>
-
-      <!-- Button -->
-      <div class="mt-4">
-        <button type="submit" class="btn btn-register">🚀 Register Candidate</button>
+        
+        <!-- Section 3: Formation Details -->
+        <div class="form-section" id="section-3">
+          <h2 class="section-title">Formation Details</h2>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.fmn_bde.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.fmn_bde.id_for_label }}">Brigade *</label>
+              {{ form.fmn_bde }}
+              {% if form.fmn_bde.errors %}
+                <div class="invalid-feedback d-block">{{ form.fmn_bde.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.fmn_div.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.fmn_div.id_for_label }}">Division *</label>
+              {{ form.fmn_div }}
+              {% if form.fmn_div.errors %}
+                <div class="invalid-feedback d-block">{{ form.fmn_div.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.fmn_corps.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.fmn_corps.id_for_label }}">Corps *</label>
+              {{ form.fmn_corps }}
+              {% if form.fmn_corps.errors %}
+                <div class="invalid-feedback d-block">{{ form.fmn_corps.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.fmn_comd.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.fmn_comd.id_for_label }}">Command *</label>
+              {{ form.fmn_comd }}
+              {% if form.fmn_comd.errors %}
+                <div class="invalid-feedback d-block">{{ form.fmn_comd.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="btn-container">
+            <button type="button" class="btn btn-prev" onclick="showSection(2)">Previous</button>
+            <button type="button" class="btn btn-next" onclick="showSection(4)">Next</button>
+          </div>
+        </div>
+        
+        <!-- Section 4: Education & Skills + Exam Details -->
+        <div class="form-section" id="section-4">
+          <h2 class="section-title">Education & Skills + Exam Details</h2>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.qualification.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.qualification.id_for_label }}">Qualification *</label>
+              {{ form.qualification }}
+              {% if form.qualification.errors %}
+                <div class="invalid-feedback d-block">{{ form.qualification.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.level_of_qualification.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.level_of_qualification.id_for_label }}">Level of Qualification *</label>
+              {{ form.level_of_qualification }}
+              {% if form.level_of_qualification.errors %}
+                <div class="invalid-feedback d-block">{{ form.level_of_qualification.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.nsqf_level.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.nsqf_level.id_for_label }}">NSQF Level *</label>
+              {{ form.nsqf_level }}
+              {% if form.nsqf_level.errors %}
+                <div class="invalid-feedback d-block">{{ form.nsqf_level.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.skill.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.skill.id_for_label }}">Skill *</label>
+              {{ form.skill }}
+              {% if form.skill.errors %}
+                <div class="invalid-feedback d-block">{{ form.skill.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.qf.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.qf.id_for_label }}">QF *</label>
+              {{ form.qf }}
+              {% if form.qf.errors %}
+                <div class="invalid-feedback d-block">{{ form.qf.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.category.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.category.id_for_label }}">Category *</label>
+              {{ form.category }}
+              {% if form.category.errors %}
+                <div class="invalid-feedback d-block">{{ form.category.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.center.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.center.id_for_label }}">Center *</label>
+              {{ form.center }}
+              {% if form.center.errors %}
+                <div class="invalid-feedback d-block">{{ form.center.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.district.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.district.id_for_label }}">District *</label>
+              {{ form.district }}
+              {% if form.district.errors %}
+                <div class="invalid-feedback d-block">{{ form.district.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row mb-4">
+            <div class="col-md-6 {% if form.state.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.state.id_for_label }}">State *</label>
+              {{ form.state }}
+              {% if form.state.errors %}
+                <div class="invalid-feedback d-block">{{ form.state.errors|striptags }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 {% if form.photograph.errors %}has-error{% endif %}">
+              <label class="form-label" for="{{ form.photograph.id_for_label }}"><span>📸</span> Photograph *</label>
+              {{ form.photograph }}
+              {% if form.photograph.errors %}
+                <div class="invalid-feedback d-block">{{ form.photograph.errors|striptags }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="btn-container">
+            <button type="button" class="btn btn-prev" onclick="showSection(3)">Previous</button>
+            <button type="submit" class="btn btn-submit">🚀 Register Candidate</button>
+          </div>
+        </div>
       </div>
     </form>
   </div>
 
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    // Function to show specific section and update progress
+    function showSection(sectionNumber) {
+      // Hide all sections
+      document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show the selected section
+      document.getElementById('section-' + sectionNumber).classList.add('active');
+      
+      // Update progress bar (for 4 steps, divide by 3 intervals)
+      const progressPercentage = (sectionNumber - 1) * (100 / 3);
+      document.querySelector('.progress-bar').style.width = progressPercentage + '%';
+      
+      // Update step indicators
+      document.querySelectorAll('.step').forEach((step, index) => {
+        if (index < sectionNumber) {
+          step.classList.add('active');
+        } else {
+          step.classList.remove('active');
+        }
+      });
+    }
+    
+    // Add Bootstrap classes to form elements
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      if (!form) return;
+      
+      // Add classes to inputs, textareas, selects
+      form.querySelectorAll('input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]), textarea, select')
+        .forEach(el => {
+          if (el.tagName === 'SELECT') {
+            el.classList.add('form-select');
+          } else {
+            el.classList.add('form-control');
+          }
+        });
+      
+      // Mark fields with errors
+      document.querySelectorAll('.has-error input, .has-error select, .has-error textarea')
+        .forEach(el => el.classList.add('is-invalid'));
+    });
+  </script>
 </body>
 </html>
