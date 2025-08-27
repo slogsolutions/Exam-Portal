@@ -1,44 +1,137 @@
-<h2>Welcome, {{ profile.name }}</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("{% static 'registration/army.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.6);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .welcome {
+            flex: 1;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #e0e0e0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .profile {
+            position: relative;
+            cursor: pointer;
+        }
+        .profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .profile-details {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            width: 200px;
+        }
+        .profile:hover .profile-details {
+            display: block;
+        }
+        .dashboard-section {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: rgba(34, 49, 34, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px black;
+        }
+        .card h2 {
+            margin-bottom: 10px;
+            color: #9acd32;
+            border-bottom: 2px solid #9acd32;
+            padding-bottom: 5px;
+        }
+        ul {
+            list-style-type: square;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <header>
+            <div class="welcome">Welcome, {{ candidate.name }}</div>
+            <div class="profile">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile">
+                <div class="profile-details">
+                    <p><strong>Name:</strong> {{ candidate.name }}</p>
+                    <p><strong>Army No:</strong> {{ candidate.army_no }}</p>
+                    <p><strong>Trade:</strong> {{ candidate.trade }}</p>
+                    <p><strong>Unit:</strong> {{ candidate.unit }}</p>
+                </div>
+            </div>
+        </header>
 
-<h3>Your Exam Registrations</h3>
-<table>
-  <tr>
-    <th>Center</th>
-    <th>Date</th>
-    <th>Shift</th>
-    <th>Status</th>
-  </tr>
-  {% for assign in assignments %}
-  <tr>
-    <td>{{ assign.center.name }}</td>
-    <td>{{ assign.shift.date }}</td>
-    <td>{{ assign.shift.start_time }}</td>
-    <td>{{ assign.status }}</td>
-  </tr>
-  {% empty %}
-  <tr><td colspan="4">No exams scheduled.</td></tr>
-  {% endfor %}
-</table>
+        <div class="dashboard-section">
+            <div class="card">
+                <h2>Scheduled Exams</h2>
+                {% if exams_scheduled %}
+                    <ul>
+                        {% for exam in exams_scheduled %}
+                            <li>{{ exam.name }} - {{ exam.date }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No scheduled exams</p>
+                {% endif %}
+            </div>
 
-<h3>Results</h3>
-<table>
-  <tr>
-    <th>Exam</th>
-    <th>Objective</th>
-    <th>Practical</th>
-    <th>Viva</th>
-    <th>View</th>
-  </tr>
-  {% for result in results %}
-  <tr>
-    <td>{{ result.assignment.primary_paper.title }}</td>
-    <td>{{ result.objective_score }}</td>
-    <td>{{ result.practical_marks }}</td>
-    <td>{{ result.viva_marks }}</td>
-    <td><a href="{% url 'exam_result_detail' result.id %}">View</a></td>
-  </tr>
-  {% empty %}
-  <tr><td colspan="5">No results available.</td></tr>
-  {% endfor %}
-</table>
-<a href="{% url 'logout' %}">Logout</a>
+            <div class="card">
+                <h2>Completed Exams</h2>
+                {% if completed_exams %}
+                    <ul>
+                        {% for exam in completed_exams %}
+                            <li>{{ exam.name }} - {{ exam.date }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No completed exams</p>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h2>Results</h2>
+                {% if results %}
+                    <ul>
+                        {% for result in results %}
+                            <li>{{ result.exam_name }} - Score: {{ result.score }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No results available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

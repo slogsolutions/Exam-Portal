@@ -1,28 +1,24 @@
-from django.shortcuts import render, redirect
-from .forms import CandidateRegistrationForm
-
-def register_candidate(request):
-    if request.method == "POST":
-        
-        print("Form is valid")
-        form = CandidateRegistrationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            print("Form is valid and saved")
-            return redirect("login")  # Define this URL/view
-        else:
-            print("error")
-    else:
-        print("invalid")
-        form = CandidateRegistrationForm()
-    return render(request, "registration/register_candidate.html", {"form": form})
-
-
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import CandidateProfile
+# assuming you have Exam / Result models, otherwise dummy placeholders
+# from exams.models import Exam, Result  
 
 @login_required
 def candidate_dashboard(request):
+    # fetch candidate profile using logged-in user
+    candidate_profile = get_object_or_404(CandidateProfile, user=request.user)
+
+    # TODO: replace below placeholders with actual querysets from Exam / Result models
+    exams_scheduled = []   # Example: Exam.objects.filter(candidate=candidate_profile, status="scheduled")
+    upcoming_exams = []    # Example: Exam.objects.filter(candidate=candidate_profile, status="upcoming")
+    completed_exams = []   # Example: Exam.objects.filter(candidate=candidate_profile, status="completed")
+    results = []           # Example: Result.objects.filter(candidate=candidate_profile)
+
     return render(request, "registration/dashboard.html", {
-        "user": request.user
+        "candidate": candidate_profile,
+        "exams_scheduled": exams_scheduled,
+        "upcoming_exams": upcoming_exams,
+        "completed_exams": completed_exams,
+        "results": results,
     })
