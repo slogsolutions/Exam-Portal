@@ -1,15 +1,14 @@
 # results/models.py
 from django.db import models
-from exams.models import ExamAttempt
+from questions.models import Question, QuestionPaper
+from registration.models import CandidateProfile   # assuming you have this
 
-class CandidateResult(models.Model):
-    attempt = models.OneToOneField(ExamAttempt, on_delete=models.CASCADE, related_name="result")
-    total_exam_marks = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    practical_marks = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    viva_marks = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    grand_total = models.DecimalField(max_digits=7, decimal_places=2, default=0)
-    vetted = models.BooleanField(default=False)
-    vetted_at = models.DateTimeField(null=True, blank=True)
+class CandidateAnswer(models.Model):
+    candidate = models.ForeignKey(CandidateProfile, on_delete=models.CASCADE)
+    paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.TextField(blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Result for {self.attempt.assignment.candidate}"
+        return f"{self.candidate.army_no} - {self.paper.title} - {self.question.id}"

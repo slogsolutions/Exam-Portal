@@ -144,3 +144,49 @@ class QuestionUploadAdmin(admin.ModelAdmin):
                 correct_answer=desc_answer,
                 marks=marks,
             )
+
+
+
+import csv
+from django.http import HttpResponse
+from django.contrib import admin
+from registration.models import CandidateProfile
+from results.models import CandidateAnswer  # import your answers model
+
+def export_candidate_answers(modeladmin, request, queryset):
+    """
+    Admin action to export selected candidates' answers as CSV.
+    """
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="selected_candidates_answers.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        "Army Number", "Candidate Name", "Category",
+        "Paper Title", "Question ID", "Question Text", "Answer", "Submitted At"
+    ])
+
+    # loop through selected candidates
+    for candidate in queryset:
+        answers = CandidateAnswer.objects.filter(candidate=candidate).select_related("candidate", "paper", "question")
+        for ans in answers:
+            writer.writerow([
+                ans.candidate.army_number,
+                ans.candidate.user.get_full_name(),
+                ans.candidate.category,
+                ans.paper.title,
+                ans.question.id,
+                ans.question.text,
+                ans.answer,
+                ans.submitted_at,
+            ])
+
+    return response
+
+export_candidate_answers.short_description = "Export selected candidates' answers to CSV"
+
+
+# @admin.register(CandidateProfile)
+class CandidateProfileAdmin(admin.ModelAdmin):
+    list_display = ("army_number", "user", "category", "can_start_exam")
+    actions = [export_candidate_answers]  # ✅ Add the action here

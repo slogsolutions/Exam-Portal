@@ -1,4 +1,4 @@
 # results/admin.py
 from django.contrib import admin
-from .models import CandidateResult
-admin.site.register(CandidateResult)
+from .models import CandidateAnswer
+admin.site.register(CandidateAnswer)

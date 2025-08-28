@@ -9,5 +9,6 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("dashboard/", views.candidate_dashboard, name="candidate_dashboard"),
     path("exam_interface/", views.exam_interface, name="exam_interface"),  # New URL pattern
+    path("export-candidate/<int:candidate_id>/", views.export_candidate_json, name="export_candidate_json"),
 
 ]

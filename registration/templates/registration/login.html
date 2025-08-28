@@ -127,7 +127,7 @@ body::before {
         <h2>ARMY EXAM LOGIN</h2>
         <p>Serve with courage. Access your exam portal account.</p>
         
-        <form method="post" action="{% url 'login' %}">
+        <form method="post">
     {% csrf_token %}
     <input type="text" name="username" placeholder="Candidate ID / Email" required>
     <input type="password" name="password" placeholder="Password" required>

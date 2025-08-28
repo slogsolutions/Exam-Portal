@@ -27,6 +27,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home),
     path("candidate/", include("registration.urls")),
+    path("results/", include("results.urls")),
+
 
 ]
 
