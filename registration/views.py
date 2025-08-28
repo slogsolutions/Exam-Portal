@@ -128,4 +128,3 @@ def export_candidate_json(request, candidate_id):
 
     except Exception as e:
         raise Http404(f"Error exporting candidate answers: {e}")
-
