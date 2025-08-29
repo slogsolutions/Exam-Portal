@@ -1,29 +1,28 @@
+# your_app/models.py
 from django.db import models
+from django.core.exceptions import ValidationError
 from reference.models import Level, Skill, QF, Category
 
+def validate_dat_file(value):
+    if not value.name.lower().endswith(".dat"):
+        raise ValidationError("Only .dat files are allowed.")
 
 class Question(models.Model):
     class Part(models.TextChoices):
-        A = "A", "Part A - MCQ"
-        # B = "A", "Part A - MCQ"
-        # C = "A", "Part A - MCQ"
-        F = "B", "Part B - True/False"
-        D = "C", "Part C - Fill in the blanks"
-        # D = "D", "Part D - Short answer (50 words)"
+        A = "A", "Part A - MCQ (Single Choice)"
+        B = "B", "Part B - MCQ (Multiple Choice)"
+        C = "C", "Part C - MCQ (Other format)"
+        D = "D", "Part D - Fill in the blanks"
         E = "E", "Part E - Long answer (100-120 words)"
+        F = "F", "Part F - True/False"
 
     text = models.TextField()
     part = models.CharField(max_length=1, choices=Part.choices)  # required
     marks = models.DecimalField(max_digits=5, decimal_places=2, default=1)
 
-    # ✅ For objective (A,B,C)
-    options = models.JSONField(blank=True, null=True)         # {"choices": ["A","B","C","D"]}
-    correct_answer = models.JSONField(blank=True, null=True)  # "B" or True or "Delhi"
+    options = models.JSONField(blank=True, null=True)
+    correct_answer = models.JSONField(blank=True, null=True)
 
-    # ✅ For descriptive (D,E) → just `text` + `marks` + expected answer
-    # stored in correct_answer if provided
-
-    # Metadata
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.SET_NULL, null=True, blank=True)
@@ -35,9 +34,8 @@ class Question(models.Model):
     def __str__(self):
         return f"[{self.get_part_display()}] {self.text[:60]}..."
 
-
 class QuestionUpload(models.Model):
-    file = models.FileField(upload_to="uploads/")
+    file = models.FileField(upload_to="uploads/", validators=[validate_dat_file])
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -59,7 +57,6 @@ class QuestionPaper(models.Model):
     def __str__(self):
         return self.title
 
-
 class PaperQuestion(models.Model):
     paper = models.ForeignKey(QuestionPaper, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -68,6 +65,3 @@ class PaperQuestion(models.Model):
     class Meta:
         unique_together = ("paper", "question")
         ordering = ["order", "id"]
-
-
-

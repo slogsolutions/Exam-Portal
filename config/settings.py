@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "reference",
     "centers",
     "registration",
-    "questions",
+    "questions.apps.QuestionsConfig",
     "exams",
     "evaluation",
     "results",
