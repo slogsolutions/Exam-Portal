@@ -105,8 +105,17 @@ export_candidates_excel.short_description = "Export selected candidates to Excel
 # ✅ Admin Registration
 @admin.register(CandidateProfile)
 class CandidateProfileAdmin(admin.ModelAdmin):
-    list_display = ("army_no", "user", "category", "download_csv_link")
+    list_display = ("army_no", "name", "user", "category", "viva_marks", "practical_marks", "download_csv_link")
     actions = [export_candidate_answers, export_candidates_excel]
+
+    def get_readonly_fields(self, request, obj=None):
+        """
+        Allow only the user with username 'Examiner' to edit viva_marks and practical_marks.
+        """
+        readonly = list(super().get_readonly_fields(request, obj))
+        if request.user.username != "PO":
+            readonly.extend(["viva_marks", "practical_marks"])
+        return readonly
 
     def download_csv_link(self, obj):
         url = reverse("export_candidate_pdf", args=[obj.id])
@@ -114,3 +123,4 @@ class CandidateProfileAdmin(admin.ModelAdmin):
 
     download_csv_link.short_description = "Export PDF"
     download_csv_link.allow_tags = True
+

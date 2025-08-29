@@ -126,11 +126,13 @@ body::before {
         </div>
         <h2>ARMY EXAM LOGIN</h2>
         <p>Serve with courage. Access your exam portal account.</p>
-        {% if form.errors %}
+        {% if form.non_field_errors %}
     <p style="color: red; font-weight: bold;">
-        Invalid username or password. Please try again.
+        {{ form.non_field_errors.0 }}
     </p>
 {% endif %}
+
+
         <form method="post">
     {% csrf_token %}
     <input type="text" name="username" placeholder="Army Number" required>

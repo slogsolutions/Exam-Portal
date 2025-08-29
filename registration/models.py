@@ -35,13 +35,13 @@ class CandidateProfile(models.Model):
     qf = models.ForeignKey(QF, on_delete=models.PROTECT)
 
     photograph = models.ImageField(upload_to="photos/", blank=True, null=True)
-
+    viva_marks = models.DecimalField(max_digits=30, decimal_places=2, null=True, blank=True)
+    practical_marks = models.DecimalField(max_digits=30, decimal_places=2, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     center = models.ForeignKey(Center, on_delete=models.PROTECT)
     shift = models.ForeignKey(Shift, on_delete=models.PROTECT, null=True, blank=True)   # ✅ New Field
 
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     @property
     def can_start_exam(self):
