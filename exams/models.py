@@ -31,7 +31,7 @@ class Shift(models.Model):
         unique_together = ("center", "date", "start_time")
 
     def __str__(self):
-        return f"{self.center.code} {self.date} {self.start_time}"
+        return f"{self.center.comd} {self.date} {self.start_time}"
 
 class ExamAssignment(models.Model):
     """

@@ -1,11 +1,11 @@
 # reference/models.py
 from django.db import models
 
-class Trade(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    code = models.CharField(max_length=30, unique=True)
+# class Trade(models.Model):
+#     name = models.CharField(max_length=120, unique=True)
+#     code = models.CharField(max_length=30, unique=True)
 
-    def __str__(self): return f"{self.code} - {self.name}"
+#     def __str__(self): return f"{self.code} - {self.name}"
 
 class Level(models.Model):
     number = models.PositiveSmallIntegerField()  # e.g., 1..10
@@ -32,6 +32,10 @@ class Category(models.Model):
     code = models.CharField(max_length=20, unique=True)
 
     def __str__(self): return f"{self.code} - {self.name}"
+    
+    class Meta:
+        verbose_name = "Trade"
+        verbose_name_plural = "Trades"
 
 class Qualification(models.Model):
     name = models.CharField(max_length=150, unique=True)

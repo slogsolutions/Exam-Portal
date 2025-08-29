@@ -136,8 +136,13 @@
                 <div class="profile-details">
                     <p><strong>Name:</strong> {{ candidate.name }}</p>
                     <p><strong>Army No:</strong> {{ candidate.army_no }}</p>
-                    <p><strong>Trade:</strong> {{ candidate.trade }}</p>
                     <p><strong>Unit:</strong> {{ candidate.unit }}</p>
+                     <hr>
+                        <a href="{% url 'login' %}" 
+                        style="display:block; margin-top:10px; padding:8px; text-align:center; 
+                                background:#9acd32; color:black; border-radius:6px; text-decoration:none;">
+                            Logout
+                        </a>
                 </div>
             </div>
         </header>
@@ -148,6 +153,14 @@
                 <h2>Scheduled Exams</h2>
                 {% if candidate %}
                 <div class="exam-card">
+                    <div class="exam-detail">
+                        <span class="label">Army Number:</span>
+                        <span class="value">{{ candidate.army_no }}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <span class="label">Name:</span>
+                        <span class="value">{{ candidate.name }}</span>
+                    </div>
                     <div class="exam-detail">
                         <span class="label">Category:</span>
                         <span class="value">{{ candidate.category }}</span>
@@ -191,27 +204,6 @@
                     {% endfor %}
                 {% else %}
                     <p>No completed exams</p>
-                {% endif %}
-            </div>
-
-            <!-- Results -->
-            <div class="card">
-                <h2>Results</h2>
-                {% if results %}
-                    {% for result in results %}
-                    <div class="exam-card">
-                        <div class="exam-detail">
-                            <span class="label">Exam:</span>
-                            <span class="value">{{ result.exam_name }}</span>
-                        </div>
-                        <div class="exam-detail">
-                            <span class="label">Score:</span>
-                            <span class="value">{{ result.score }}</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No results available</p>
                 {% endif %}
             </div>
         </div>

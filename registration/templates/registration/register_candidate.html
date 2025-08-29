@@ -352,13 +352,6 @@
                 <div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
               {% endif %}
             </div>
-            <div class="col-md-6 {% if form.trade.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.trade.id_for_label }}"><span>🔧</span> Trade *</label>
-              {{ form.trade }}
-              {% if form.trade.errors %}
-                <div class="invalid-feedback d-block">{{ form.trade.errors|striptags }}</div>
-              {% endif %}
-            </div>
           </div>
           
           <div class="row mb-4">

@@ -1,5 +1,5 @@
 from django.db import models
-from reference.models import Trade, Level, Skill, QF, Category
+from reference.models import Level, Skill, QF, Category
 
 
 class Question(models.Model):
@@ -22,7 +22,6 @@ class Question(models.Model):
     # stored in correct_answer if provided
 
     # Metadata
-    trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, null=True, blank=True)
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.SET_NULL, null=True, blank=True)
@@ -44,8 +43,7 @@ class QuestionUpload(models.Model):
 
 class QuestionPaper(models.Model):
     title = models.CharField(max_length=150)
-    is_common = models.BooleanField(default=False)  # False = trade-specific
-    trade = models.ForeignKey(Trade, on_delete=models.PROTECT, null=True, blank=True)
+    is_common = models.BooleanField(default=False)
     level = models.ForeignKey(Level, on_delete=models.PROTECT, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.PROTECT, null=True, blank=True)
@@ -54,8 +52,6 @@ class QuestionPaper(models.Model):
     active_from = models.DateField(null=True, blank=True)
     active_to = models.DateField(null=True, blank=True)
     upload = models.ForeignKey(QuestionUpload, on_delete=models.SET_NULL, null=True, blank=True)
-
-
     questions = models.ManyToManyField(Question, through="PaperQuestion")
 
     def __str__(self):

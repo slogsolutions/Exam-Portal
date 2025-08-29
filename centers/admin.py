@@ -3,6 +3,6 @@ from .models import Center
 
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
-    list_display = ("code", "name", "district", "state", "capacity", "is_active")
+    list_display = ("comd", "exam_Center", "district", "state", "capacity", "is_active")
     list_filter = ("state", "is_active")
-    search_fields = ("code", "name", "district", "state")
+    search_fields = ("comd", "exam_Center", "district", "state")

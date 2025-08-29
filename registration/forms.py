@@ -12,7 +12,7 @@ class CandidateRegistrationForm(forms.ModelForm):
     class Meta:
         model = CandidateProfile
         fields = [
-            "army_no", "rank", "name", "trade", "dob", "father_name",
+            "army_no", "rank", "name", "dob", "father_name",
             "enrolment_no", "doe", "aadhar_number", "unit",
             "fmn_bde", "fmn_div", "fmn_corps", "fmn_comd",
             "trg_centre", "district", "state", "qualification",

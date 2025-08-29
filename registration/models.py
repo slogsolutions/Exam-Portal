@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from reference.models import Trade, Level, Skill, QF, Qualification, Category
+from reference.models import Level, Skill, QF, Qualification, Category
 from centers.models import Center
 from exams.models import Shift   # ✅ Import Shift
 from django.utils import timezone
@@ -12,7 +12,7 @@ class CandidateProfile(models.Model):
     army_no = models.CharField(max_length=50, unique=True)
     rank = models.CharField(max_length=50)
     name = models.CharField(max_length=150)
-    trade = models.ForeignKey(Trade, on_delete=models.PROTECT)
+    # trade = models.ForeignKey(Trade, on_delete=models.PROTECT)
     dob = models.DateField(verbose_name="Date of Birth")
     father_name = models.CharField(max_length=150)
     enrolment_no = models.CharField(max_length=100, blank=True)
