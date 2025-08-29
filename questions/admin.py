@@ -59,7 +59,7 @@ class QuestionUploadAdmin(admin.ModelAdmin):
         sheet = wb.active
 
         for row in sheet.iter_rows(min_row=2, values_only=True):  # skip header
-            part, question_text, opt_a, opt_b, opt_c, opt_d, correct, marks, desc_answer = row
+            part, question_text, opt_a, opt_b, opt_c, opt_d = row
 
             if not part or not question_text:
                 continue  # skip empty rows
@@ -69,16 +69,24 @@ class QuestionUploadAdmin(admin.ModelAdmin):
                     part=part,
                     text=question_text,
                     options={"choices": [opt_a, opt_b, opt_c, opt_d]},
-                    correct_answer=correct,
-                    marks=marks or 1,
                 )
-            elif part in ["D", "E"]:  # Descriptive
+            if part in ["F"]:  # TRUE/FALSE
                 Question.objects.create(
                     part=part,
                     text=question_text,
-                    correct_answer=desc_answer,
-                    marks=marks or (5 if part == "D" else 10),
+                    options={"choices": [opt_a, opt_b]},
                 )
+            if part in ["D"]:  # Descriptive
+                Question.objects.create(
+                    part=part,
+                    text=question_text,
+                )
+            if part in ["E"]:  # Descriptive
+                Question.objects.create(
+                    part=part,
+                    text=question_text,
+                )
+            
 
     # -----------------------------
     # ✅ Import from Word

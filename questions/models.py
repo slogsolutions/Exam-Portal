@@ -5,9 +5,11 @@ from reference.models import Level, Skill, QF, Category
 class Question(models.Model):
     class Part(models.TextChoices):
         A = "A", "Part A - MCQ"
-        B = "B", "Part B - True/False"
-        C = "C", "Part C - Fill in the blanks"
-        D = "D", "Part D - Short answer (50 words)"
+        # B = "A", "Part A - MCQ"
+        # C = "A", "Part A - MCQ"
+        F = "B", "Part B - True/False"
+        D = "C", "Part C - Fill in the blanks"
+        # D = "D", "Part D - Short answer (50 words)"
         E = "E", "Part E - Long answer (100-120 words)"
 
     text = models.TextField()
