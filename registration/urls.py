@@ -10,5 +10,5 @@ urlpatterns = [
     path("dashboard/", views.candidate_dashboard, name="candidate_dashboard"),
     path("exam_interface/", views.exam_interface, name="exam_interface"),  # New URL pattern
     path("export-candidate/<int:candidate_id>/", views.export_answers_pdf, name="export_candidate_pdf"),
-
+    path("exam_success/", views.exam_success, name="exam_success"),
 ]
