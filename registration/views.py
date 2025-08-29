@@ -52,7 +52,8 @@ def exam_interface(request):
     category = candidate_profile.category
     part_a = QuestionPaper.objects.filter(category=category, is_common=False).first()
     part_b = QuestionPaper.objects.filter(category=category, is_common=True).first()
-
+    current_paper = part_a or part_b
+    duration_seconds = int(current_paper.duration.total_seconds()) if current_paper and current_paper.duration else 0
     if request.method == "POST":
         paper_id = request.POST.get("paper_id")
         paper = QuestionPaper.objects.get(id=paper_id)
@@ -73,6 +74,7 @@ def exam_interface(request):
         "candidate": candidate_profile,
         "part_a": part_a,
         "part_b": part_b,
+        "duration_seconds": duration_seconds,
     })
 
 

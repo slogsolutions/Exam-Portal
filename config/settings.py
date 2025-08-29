@@ -143,3 +143,7 @@ connect(
     db="examportal",
     host="mongodb://localhost:27017/examportal"  # or your MongoDB Atlas URI
 )
+
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]

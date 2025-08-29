@@ -48,7 +48,7 @@ class QuestionPaper(models.Model):
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.PROTECT, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True)
-
+    duration = models.DurationField(null=True, blank=True,help_text="Enter exam duration in format HH:MM:SS (e.g., 01:30:00 for 1h30m)")
     active_from = models.DateField(null=True, blank=True)
     active_to = models.DateField(null=True, blank=True)
     upload = models.ForeignKey(QuestionUpload, on_delete=models.SET_NULL, null=True, blank=True)
