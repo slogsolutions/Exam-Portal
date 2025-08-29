@@ -20,16 +20,24 @@ def candidate_dashboard(request):
         "results": results,
     })
 
+# views.py (relevant part)
+# from django.shortcuts import render, redirect
+from django.contrib import messages
+# from .forms import CandidateRegistrationForm
+
 def register_candidate(request):
     if request.method == "POST":
         form = CandidateRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            candidate = form.save(commit=False)
-            candidate.user = request.user   # ✅ link logged-in user
-            candidate.save()
-            return redirect("login")
+            candidate = form.save()   # form creates User and CandidateProfile correctly
+            messages.success(request, "Registration successful. Please log in.")
+            return redirect("login")  # or redirect to whichever page you prefer
+        else:
+            # Optional: log or print errors to console for debugging
+            print("Registration form invalid:", form.errors)
     else:
         form = CandidateRegistrationForm()
+
     return render(request, "registration/register_candidate.html", {"form": form})
 
 
@@ -60,7 +68,7 @@ def exam_interface(request):
         paper = QuestionPaper.objects.get(id=paper_id)
 
         for key, value in request.POST.items():
-            if key.startswith("question_"):  # e.g. question_5
+            if key.startswith("question_"):
                 qid = key.split("_")[1]
                 question = Question.objects.get(id=qid)
                 CandidateAnswer.objects.update_or_create(
@@ -80,12 +88,16 @@ def exam_interface(request):
 
 
 import os
-import json
 import tempfile
 from django.http import FileResponse, Http404
 from results.models import CandidateAnswer
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
+from reportlab.lib.pdfencrypt import StandardEncryption
 
-def export_candidate_json(request, candidate_id):
+
+def export_answers_pdf(request, candidate_id):
     try:
         answers = CandidateAnswer.objects.filter(candidate_id=candidate_id).select_related(
             "candidate", "paper", "question"
@@ -94,37 +106,61 @@ def export_candidate_json(request, candidate_id):
         if not answers.exists():
             raise Http404("No answers found for this candidate.")
 
-        # Prepare JSON data
-        data = []
-        for ans in answers:
-            data.append({
-                "army_number": getattr(ans.candidate, "army_no", ans.candidate.user.username),
-                "candidate_name": getattr(ans.candidate, "name", ans.candidate.user.get_full_name()),
-                "category": str(ans.candidate.category),
-                "paper_title": ans.paper.title,
-                "question_id": ans.question.id,
-                "question_text": ans.question.text,
-                "answer": ans.answer,
-                "submitted_at": ans.submitted_at.isoformat(),
-            })
+        # Candidate details
+        candidate = answers[0].candidate
+        army_no = getattr(candidate, "army_no", candidate.user.username)
+        candidate_name = candidate.user.get_full_name()
 
-        json_data = json.dumps(data, indent=4).encode("utf-8")
-
-        # File name
-        army_no = getattr(answers[0].candidate, "army_no", answers[0].candidate.user.username)
-        filename = f"{army_no}_answers.json"
-
-        # Save to temp file
+        filename = f"{army_no}_answers.pdf"
         tmp_path = os.path.join(tempfile.gettempdir(), filename)
-        with open(tmp_path, "wb") as f:
-            f.write(json_data)
 
-        # Make file read-only
-        os.chmod(tmp_path, 0o444)  # read-only for everyone
+        # PDF password protection (password = Army No)
+        password = army_no
+        from reportlab.lib.pdfencrypt import StandardEncryption
+        enc = StandardEncryption(
+            userPassword=password,
+            ownerPassword="sarthak",
+            canPrint=1,
+            canModify=0,
+            canCopy=0,
+            canAnnotate=0
+        )
 
-        # Return file as download
-        response = FileResponse(open(tmp_path, "rb"), as_attachment=True, filename=filename)
-        return response
+        # Create PDF
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.units import inch
+
+        c = canvas.Canvas(tmp_path, pagesize=A4, encrypt=enc)
+        width, height = A4
+
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(1 * inch, height - 1 * inch, "Candidate Answers Export")
+
+        c.setFont("Helvetica", 12)
+        c.drawString(1 * inch, height - 1.5 * inch, f"Army No: {army_no}")
+        c.drawString(1 * inch, height - 1.8 * inch, f"Name: {candidate_name}")
+        c.drawString(1 * inch, height - 2.1 * inch, f"Category: {candidate.category}")
+        c.drawString(1 * inch, height - 2.4 * inch, f"Paper: {answers[0].paper.title}")
+
+        y = height - 3 * inch
+        c.setFont("Helvetica", 11)
+
+        for idx, ans in enumerate(answers, start=1):
+            question_text = (ans.question.text[:80] + "...") if len(ans.question.text) > 80 else ans.question.text
+            c.drawString(1 * inch, y, f"Q{idx}: {question_text}")
+            y -= 0.3 * inch
+            c.drawString(1.2 * inch, y, f"Answer: {ans.answer}")
+            y -= 0.5 * inch
+
+            if y < 1.5 * inch:
+                c.showPage()
+                c.setFont("Helvetica", 11)
+                y = height - 1 * inch
+
+        c.save()
+
+        return FileResponse(open(tmp_path, "rb"), as_attachment=True, filename=filename)
 
     except Exception as e:
         raise Http404(f"Error exporting candidate answers: {e}")

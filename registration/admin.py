@@ -43,7 +43,7 @@ class CandidateProfileAdmin(admin.ModelAdmin):
     actions = [export_candidate_answers]
 
     def download_csv_link(self, obj):
-        url = reverse("export_candidate_json", args=[obj.id])
-        return format_html('<a class="button" href="{}">Download Answers JSON</a>', url)
-    download_csv_link.short_description = "Export JSON"
+        url = reverse("export_candidate_pdf", args=[obj.id])
+        return format_html('<a class="button" href="{}">Download Answers pdf</a>', url)
+    download_csv_link.short_description = "Export PDF"
     download_csv_link.allow_tags = True

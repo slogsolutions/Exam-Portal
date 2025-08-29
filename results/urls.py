@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("export-csv/", views.export_answers_csv, name="export_answers_csv"),
+    path("export-csv/", views.export_answers_pdf, name="export_answers_pdf"),
 ]

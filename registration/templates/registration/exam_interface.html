@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Portal</title>
-
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Font Awesome CDN for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --primary: #4e73df;
@@ -16,6 +19,9 @@
             --light: #f8f9fc;
             --dark: #5a5c69;
             --sidebar-width: 250px;
+            --gradient-primary: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
         
         * {
@@ -26,194 +32,271 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fc;
+            background: linear-gradient(to bottom, #f8f9fc, #ebedf3);
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .exam-container {
             display: flex;
             min-height: 100vh;
+            position: relative;
         }
         
         /* Sidebar Styling */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--primary) 0%, #224abe 100%);
+            background: var(--gradient-primary);
             color: white;
             min-height: 100vh;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
             z-index: 1000;
+            position: fixed;
+            height: 100%;
         }
         
         .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
         }
         
         .sidebar-header h4 {
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         
         .nav-item {
-            margin: 5px 0;
-            border-radius: 5px;
+            margin: 8px 10px;
+            border-radius: 8px;
             overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            transform: translateX(5px);
         }
         
         .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
-            padding: 12px 20px;
-            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 14px 25px;
+            transition: all 0.3s ease;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 1.1rem;
         }
         
         .nav-link:hover, .nav-link.active {
             color: white !important;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
         }
         
         .nav-link.active {
-            border-left: 4px solid white;
+            border-left: 5px solid white;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            padding: 0 20px;
         }
         
         /* Main Content Styling */
         .main-content {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
             margin-left: var(--sidebar-width);
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            background: transparent;
         }
         
         .tab-content {
-            padding: 20px 0;
+            padding: 25px 0;
         }
         
         /* Card Styling */
         .question-card {
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-            margin-bottom: 20px;
-            transition: transform 0.3s;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            background: white;
+            overflow: hidden;
         }
         
         .question-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
         
         .question-card .card-header {
-            background: linear-gradient(180deg, white 0%, #f8f9fc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
             border-bottom: 1px solid #e3e6f0;
-            padding: 15px 20px;
-            border-radius: 10px 10px 0 0 !important;
+            padding: 20px 25px;
+            border-radius: 15px 15px 0 0 !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .question-card .card-header h5 {
+            margin: 0;
+            display: flex;
+            align-items: center;
         }
         
         .question-card .card-body {
-            padding: 20px;
+            padding: 25px;
         }
         
         .question-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
             background: var(--primary);
             color: white;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 15px;
             font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(78, 115, 223, 0.3);
         }
         
         .marks-badge {
-            float: right;
             background: var(--success);
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(28, 200, 138, 0.2);
         }
         
         /* Form Styling */
         .form-check {
-            margin: 10px 0;
+            margin: 12px 0;
             padding-left: 0;
         }
         
         .form-check-input {
-            margin-right: 10px;
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
         }
         
         .form-check-label {
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.2s;
+            padding: 10px 18px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid #e3e6f0;
         }
         
         .form-check-label:hover {
             background-color: #f0f4ff;
+            border-color: var(--primary);
+        }
+        
+        .form-check-input:checked + .form-check-label {
+            background-color: rgba(78, 115, 223, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
         }
         
         textarea.form-control {
-            border-radius: 5px;
+            border-radius: 8px;
             border: 1px solid #d1d3e2;
             padding: 15px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            resize: vertical;
+            min-height: 120px;
         }
         
         textarea.form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
         }
         
         /* Button Styling */
         .btn-submit {
             background: var(--success);
             border: none;
-            padding: 12px 30px;
+            padding: 14px 35px;
             font-weight: 600;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
+            border-radius: 8px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            color: white;
         }
         
         .btn-submit:hover {
             background: #17a673;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
         }
         
         /* Progress Bar */
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
         }
         
         .progress {
-            height: 10px;
-            margin-top: 10px;
+            height: 12px;
+            margin-top: 12px;
+            border-radius: 10px;
+            background: #e3e6f0;
+        }
+        
+        .progress-bar {
+            background: var(--primary);
+            transition: width 0.6s ease;
         }
         
         /* Timer */
         .timer {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: bold;
             color: var(--primary);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .timer i {
+            margin-right: 10px;
+            font-size: 1.5rem;
         }
         
         /* Responsive Design */
@@ -225,11 +308,29 @@
             .sidebar {
                 width: 100%;
                 min-height: auto;
+                position: relative;
             }
             
             .main-content {
                 margin-left: 0;
+                padding: 20px;
             }
+        }
+        
+        /* Add subtle animation for cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .question-card {
+            animation: fadeInUp 0.5s ease forwards;
         }
     </style>
 </head>
@@ -244,30 +345,35 @@
                 {% if part_a %}
                 <li class="nav-item">
                     <a class="nav-link active" data-bs-toggle="tab" href="#partA">
-                        <i class="fas fa-folder-open me-2"></i> Part A (Category)
+                        <i class="fas fa-folder-open"></i> Part A (Category)
                     </a>
                 </li>
                 {% endif %}
                 {% if part_b %}
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#partB">
-                        <i class="fas fa-folder me-2"></i> Part B (Common)
+                        <i class="fas fa-folder"></i> Part B (Common)
                     </a>
                 </li>
                 {% endif %}
             </ul>
+            <div class="sidebar-footer">
+                <button id="final-submit" class="btn btn-submit w-100" disabled>
+                    <i class="fas fa-check me-2"></i> Final Submit
+                </button>
+            </div>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <!-- Timer -->
             <div class="timer">
-                <i class="fas fa-clock me-2"></i> Time Remaining: <span id="countdown">01:30:00</span>
+                <i class="fas fa-clock"></i> Time Remaining: <span id="countdown">01:15:00</span>
             </div>
             
             <!-- Progress Bar -->
             <div class="progress-container">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mb-2">
                     <span>Exam Progress</span>
                     <span>50%</span>
                 </div>
@@ -280,7 +386,7 @@
                 {% if part_a %}
                 <div class="tab-pane fade show active" id="partA">
                     <h3 class="mb-4">{{ part_a.title }}</h3>
-                    <form method="post">
+                    <form id="formA" method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="paper_id" value="{{ part_a.id }}">
                         {% for question in part_a.questions.all %}
@@ -322,7 +428,7 @@
                 {% if part_b %}
                 <div class="tab-pane fade" id="partB">
                     <h3 class="mb-4">{{ part_b.title }}</h3>
-                    <form method="post">
+                    <form id="formB" method="post" action="">
                         {% csrf_token %}
                         <input type="hidden" name="paper_id" value="{{ part_b.id }}">
                         {% for question in part_b.questions.all %}
@@ -364,12 +470,13 @@
         </div>
     </div>
 
-    <!-- Bootstrap and jQuery JS (offline) -->
+    <!-- Bootstrap 5 JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script>
         // Simple timer implementation
         function startTimer(duration, display) {
             let timer = duration, hours, minutes, seconds;
-            setInterval(function () {
+            const interval = setInterval(function () {
                 hours = parseInt(timer / 3600, 10);
                 minutes = parseInt((timer % 3600) / 60, 10);
                 seconds = parseInt(timer % 60, 10);
@@ -381,7 +488,11 @@
                 display.textContent = hours + ":" + minutes + ":" + seconds;
                 
                 if (--timer < 0) {
-                    timer = duration;
+                    clearInterval(interval);
+                    display.textContent = "00:00:00";
+                    // Optional: Alert or auto-submit on time up
+                    alert("Time's up! Your exam will be submitted automatically.");
+                    // You can add auto-submit logic here if needed
                 }
             }, 1000);
         }
@@ -390,26 +501,63 @@
             const ninetyMinutes = 90 * 60;
             const display = document.querySelector('#countdown');
             startTimer(ninetyMinutes, display);
+
+            // Submission tracking logic
+            let hasPartA = !!document.getElementById('partA');
+            let hasPartB = !!document.getElementById('partB');
+
+            if (hasPartA && document.getElementById('formA')) {
+                document.getElementById('formA').addEventListener('submit', () => {
+                    localStorage.setItem('partA_submitted', 'true');
+                });
+            }
+
+            if (hasPartB && document.getElementById('formB')) {
+                document.getElementById('formB').addEventListener('submit', () => {
+                    localStorage.setItem('partB_submitted', 'true');
+                });
+            }
+
+            function updateSubmitButtons() {
+                if (hasPartA) {
+                    let aSub = localStorage.getItem('partA_submitted') === 'true';
+                    let btnA = document.querySelector('#partA .btn-submit');
+                    if (btnA && aSub) {
+                        btnA.disabled = true;
+                        btnA.innerHTML = '<i class="fas fa-check me-2"></i> Part A Submitted';
+                    }
+                }
+                if (hasPartB) {
+                    let bSub = localStorage.getItem('partB_submitted') === 'true';
+                    let btnB = document.querySelector('#partB .btn-submit');
+                    if (btnB && bSub) {
+                        btnB.disabled = true;
+                        btnB.innerHTML = '<i class="fas fa-check me-2"></i> Part B Submitted';
+                    }
+                }
+            }
+
+            function checkFinal() {
+                let aSub = localStorage.getItem('partA_submitted') === 'true';
+                let bSub = localStorage.getItem('partB_submitted') === 'true';
+                let enabled = (!hasPartA || aSub) && (!hasPartB || bSub);
+                let finalBtn = document.getElementById('final-submit');
+                if (finalBtn) {
+                    finalBtn.disabled = !enabled;
+                }
+            }
+
+            updateSubmitButtons();
+            checkFinal();
+
+    let finalBtn = document.getElementById('final-submit');
+    if (finalBtn) {
+        finalBtn.addEventListener('click', () => {
+            window.location.href = "{% url 'candidate_dashboard' %}";
+        });
+    }
+
         };
-        
-        // Tab switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const triggerTabList = [].slice.call(document.querySelectorAll('.nav-link'))
-            triggerTabList.forEach(function(triggerEl) {
-                triggerEl.addEventListener('click', function(event) {
-                    event.preventDefault()
-                    const target = document.querySelector(triggerEl.getAttribute('href'))
-                    
-                    // Remove active class from all tabs and panes
-                    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'))
-                    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('show', 'active'))
-                    
-                    // Add active class to clicked tab and corresponding pane
-                    triggerEl.classList.add('active')
-                    target.classList.add('show', 'active')
-                })
-            })
-        })
     </script>
 </body>
 </html>
