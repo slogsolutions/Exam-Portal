@@ -5,6 +5,7 @@ from .models import CandidateProfile
 
 User = get_user_model()
 
+
 class CandidateRegistrationForm(forms.ModelForm):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
@@ -12,16 +13,15 @@ class CandidateRegistrationForm(forms.ModelForm):
     class Meta:
         model = CandidateProfile
         fields = [
-            "army_no", "rank", "name", "dob", "father_name",
-            "enrolment_no", "doe", "aadhar_number", "unit",
-            "fmn_bde", "fmn_div", "fmn_corps", "fmn_comd",
-            "trg_centre", "district", "state", "qualification",
-            "level_of_qualification", "nsqf_level", "skill", "qf",
-            "photograph", "category", "center", "shift"
+                "army_no", "rank", "trade", "name", "dob", "doe",
+                "aadhar_number", "father_name", "photograph",
+                "qualification", "nsqf_level", "exam_center", "training_center",
+                "state", "district", "duration", "credits",
+                "shift",
         ]
         widgets = {
             "dob": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "doe": forms.DateInput(attrs={"type": "date", "class": "form-control"})
+            "doe": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
         }
 
     def clean_username(self):

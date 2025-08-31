@@ -4,8 +4,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Army Exam Login</title>
-    <!-- Local Bootstrap CSS -->
-    <link href="{% static 'css/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <style>
         body {
@@ -27,20 +25,44 @@
             right: 20px;
         }
 
+        .top-buttons a {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-left: 8px;
+            color: #fff;
+        }
+
+        .btn-warning {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        /* Login container */
         .login-container {
             background-color: rgba(15, 40, 15, 0.92);
-            padding: 40px 30px;
-            border-radius: 12px;
+            padding: 50px 40px;
+            border-radius: 14px;
             border: 2px solid #FFD700;
             box-shadow: 0 0 20px rgba(0,0,0,0.7);
-            width: 350px;
+            width: 420px;   /* bigger than before */
             text-align: center;
         }
 
         .login-container input {
-            width: 85%;
-            margin: 10px auto;
-            padding: 12px;
+            width: 90%;
+            margin: 12px auto;
+            padding: 14px;
             border: 2px solid #FFD700;
             border-radius: 6px;
             font-size: 15px;
@@ -50,9 +72,9 @@
         }
 
         .login-container button {
-            width: 70%;
-            margin: 15px auto;
-            padding: 12px;
+            width: 75%;
+            margin: 18px auto;
+            padding: 14px;
             font-size: 16px;
             background-color: #FFD700;
             border: none;
@@ -69,12 +91,12 @@
 
         /* Logo Badge */
         .logo-badge {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             background: white;
             border: 3px solid #FFD700;
             border-radius: 50%;
-            margin: -70px auto 20px auto;
+            margin: -80px auto 25px auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -90,7 +112,8 @@
 
         h2 {
             color: #FFD700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 22px;
         }
 
         p {
@@ -103,9 +126,9 @@
 <body>
     <!-- Top-right corner buttons -->
     <div class="top-buttons">
-        <a href="/admin" class="btn btn-warning btn-sm me-2">Admin Panel</a>
-        <a href="/candidate/register" class="btn btn-success btn-sm me-2">Register</a>
-        <a href="/admin" class="btn btn-danger btn-sm">PO Admin</a>
+        <a href="/admin" class="btn-warning">Admin Panel</a>
+        <a href="/candidate/register" class="btn-success">Register</a>
+        <a href="/admin" class="btn-danger">PO Admin</a>
     </div>
 
     <!-- Login Card -->
@@ -115,22 +138,19 @@
         </div>
         <h2>ARMY EXAM LOGIN</h2>
         <p>Serve with courage. Access your exam portal account.</p>
+        
         {% if form.non_field_errors %}
-    <p style="color: red; font-weight: bold;">
-        {{ form.non_field_errors.0 }}
-    </p>
-{% endif %}
-
+            <p style="color: red; font-weight: bold;">
+                {{ form.non_field_errors.0 }}
+            </p>
+        {% endif %}
 
         <form method="post">
             {% csrf_token %}
             <input type="text" name="username" placeholder="Army Number" required>
             <input type="password" name="password" placeholder="Date of Birth (dd-mm-yyyy)" required>
-            <button type="submit" class="btn">Login to Exam Portal</button>
+            <button type="submit">Login to Exam Portal</button>
         </form>
     </div>
-
-    <!-- Local Bootstrap JS -->
-    <script src="{% static 'css/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

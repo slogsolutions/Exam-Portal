@@ -1,624 +1,231 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Candidate Registration | Indian Army</title>
-  <!-- Offline Bootstrap -->
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-
+  <meta charset="UTF-8" />
+  <title>Army Candidate Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root {
-      --primary: #2f4a34;
-      --primary-light: #a3b18a;
-      --primary-dark: #1e2e22;
-      --accent: #3d5a40;
-      --light-bg: #f8faf7;
-      --border: #dce5da;
+    :root{
+      --army-green:#1e2e22;
+      --army-green-light:#3a4d39;
+      --army-gold:#d4af37;
+      --army-muted:#cfcfcf;
+      --card-bg:rgba(20,30,20,0.88);
     }
-    
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f5f7f3 0%, #e8efe5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-      padding: 20px;
-      font-size: 1.1rem; /* Increased base font size for attractiveness */
+    html,body{height:100%;margin:0;}
+    body{
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background: url("{% static 'registration/army.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      color:#f0f0f0;
+      display:flex;align-items:flex-start;justify-content:center;
+      padding:30px 10px;position:relative;
     }
-    
-    .registration-container {
-      width: 100%;
-      max-width: 1200px;
+    body::before{
+      content:"";position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.45);z-index:-1;
     }
-    
-    .registration-header {
-      text-align: center;
-      margin-bottom: 30px;
+    .wrap{max-width:1050px;width:100%;}
+    .title{font-size:34px;font-weight:900;text-align:center;margin:6px 0;color:var(--army-gold);text-shadow:2px 2px 8px rgba(0,0,0,0.9);}
+    .subtitle{text-align:center;color:#f0f0f0;margin:0 0 30px;font-size:16px;font-weight:600;text-shadow:1px 1px 6px rgba(0,0,0,0.9);}
+    .stepper{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px;margin:0 auto 28px;max-width:820px;}
+    .step{text-align:center;color:#bbb;font-size:12px;font-weight:600;}
+    .step .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--army-gold);color:var(--army-gold);font-weight:800;margin:0 auto 6px;}
+    .step.active{color:#fff}.step.active .dot{background:var(--army-gold);color:#000;}
+    .line{height:3px;width:100%;background:rgba(255,255,255,0.3);}
+    .card{max-width:760px;margin:0 auto;background:var(--card-bg);border-radius:16px;padding:28px 26px;}
+    .card h2{text-align:center;font-size:20px;margin:0 0 18px;font-weight:800;color:var(--army-gold);}
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
-    
-    .registration-header h1 {
-      color: var(--primary-dark);
-      font-weight: 800;
-      margin-bottom: 8px;
-      font-size: 2.5rem;
-      text-transform: uppercase;
-    }
-    
-    .registration-header p {
-      color: #6a7b6c;
-      font-size: 1.1rem;
-    }
-    
-    .progress-container {
-      margin-bottom: 40px;
-    }
-    
-    .progress-steps {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      margin-bottom: 20px;
-    }
-    
-    .progress-steps::before {
-      content: "";
-      position: absolute;
-      top: 15px;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background-color: #e9ecef;
-      z-index: 1;
-    }
-    
-    .progress-bar {
-      position: absolute;
-      top: 15px;
-      left: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary-light), var(--primary));
-      z-index: 2;
-      width: 25%; /* Initially at step 1 */
-      transition: width 0.5s ease;
-    }
-    
-    .step {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      width: 70px;
-    }
-    
-    .step-number {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background-color: white;
-      border: 4px solid #e9ecef;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 8px;
+    .grid-1 {grid-template-columns: 1fr;}
+    label {
+      display: block;
       font-weight: 700;
-      color: #6c757d;
+      font-size: 14px;
+      color: var(--army-gold);
+      margin-bottom: 6px;
     }
-    
-    .step.active .step-number {
-      background-color: var(--primary);
-      border-color: var(--primary);
-      color: white;
+
+    /* Inputs + Selects */
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--army-green-light);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
-    
-    .step-label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #6c757d;
+    input:focus, select:focus {
+      border-color: var(--army-gold);
+      outline: none;
+      box-shadow: 0 0 6px var(--army-gold);
     }
-    
-    .step.active .step-label {
-      color: var(--primary-dark);
+
+    /* Custom dropdown arrow */
+    select {
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23d4af37' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 18px;
+      padding-right: 40px;
+      cursor: pointer;
     }
-    
-.registration-card {
-  background: #fff;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  padding: 40px 50px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
-  max-width: 650px;
-  margin: 40px auto;
-  text-align: left;
-  transition: all 0.3s ease;
-}
+    select option {
+      background: var(--army-green);
+      color: #fff;
+    }
 
-.registration-card:hover {
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-}
-
-.form-section {
-  display: none;
-}
-.form-section.active {
-  display: block;
-}
-
-.section-title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--primary-dark);
-  margin-bottom: 30px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--primary-light);
-  text-align: center;
-}
-
-.form-label {
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 2rem;
-}
-
-.form-control,
-.form-select {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1.5px solid #dfe4dd;
-  background-color: #fafdf9;
-  transition: all 0.2s;
-  font-size: 1rem;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--primary);
-  background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(61, 90, 64, 0.12);
-  outline: none;
-}
-
-.input-hint {
-  font-size: 0.85rem;
-  color: #6a7b6c;
-  margin-top: 5px;
-}
-
-.btn-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 35px;
-}
-
-.btn {
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 1rem;
+    /* Date input calendar icon */
+    /* Make the calendar icon golden */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(72%) sepia(85%) saturate(450%) hue-rotate(20deg) brightness(1.2);
   cursor: pointer;
+  opacity: 1;
 }
 
-.btn-prev {
-  background-color: #fff;
-  border: 2px solid var(--primary-light);
-  color: var(--primary);
-}
-.btn-prev:hover {
-  background-color: #f4f8f3;
-  border-color: var(--primary);
-}
 
-.btn-next,
-.btn-submit {
-  background: linear-gradient(90deg, var(--primary-light), var(--primary));
-  border: none;
-  color: white;
-}
-.btn-next:hover,
-.btn-submit:hover {
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(61, 90, 64, 0.25);
-}
-
-/* Error styles */
-.has-error .form-control,
-.has-error .form-select {
-  border-color: #dc3545;
-}
-
-.invalid-feedback {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 6px;
-  padding: 6px 10px;
-  background-color: rgba(220, 53, 69, 0.08);
-  border-radius: 6px;
-}
-
-.alert-errors {
-  border-left: 4px solid #dc3545;
-  margin-bottom: 25px;
-  background: rgba(220, 53, 69, 0.05);
-  padding: 10px 15px;
-  border-radius: 8px;
-}
-
-    
-    /* Make fields appear on the right of labels (already handled by Bootstrap grid) */
+    input[readonly]{background:rgba(255,255,255,0.1);color:#ddd;}
+    .actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px;}
+    .btn{flex:1;padding:12px 18px;border-radius:10px;font-weight:800;font-size:15px;cursor:pointer;}
+    .btn-ghost{border:2px solid var(--army-gold);color:var(--army-gold);background:transparent;}
+    .btn-primary{background:var(--army-gold);color:#000;}
+    .form-step{display:none}.form-step.active{display:block}
   </style>
 </head>
 <body>
-  <div class="registration-container">
-    <div class="registration-header">
-      <h1>ARMY CANDIDATE REGISTRATION</h1>
-      <p>Defence Personnel Registration Portal</p>
-    </div>
-    
-    <div class="progress-container">
-      <div class="progress-steps">
-        <div class="progress-bar"></div>
-        <div class="step active">
-          <div class="step-number">1</div>
-          <div class="step-label">Account Info</div>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-label">Personal Details</div>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-label">Formation Details</div>
-        </div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-label">Education & Exam</div>
-        </div>
-      </div>
-    </div>
-    
-    {# Non-field errors (form-wide) #}
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger alert-errors" role="alert">
-        {{ form.non_field_errors }}
-      </div>
-    {% endif %}
+  <div class="wrap">
+    <div class="title">ARMY CANDIDATE REGISTRATION</div>
+    <div class="subtitle">Defence Personnel Registration Portal</div>
 
-    <form method="post" enctype="multipart/form-data" novalidate>
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step active"><div class="dot">1</div>Account<br/>Info</div>
+      <div class="line"></div>
+      <div class="step"><div class="dot">2</div>Personal<br/>Details</div>
+      <div class="line"></div>
+      <div class="step"><div class="dot">3</div>Exam Details<br/>Details</div>
+    </div>
+
+    <form id="regForm" class="card" method="post" enctype="multipart/form-data" novalidate>
       {% csrf_token %}
-      
-      <div class="registration-card">
-        <!-- Section 1: Account Information -->
-        <div class="form-section active" id="section-1">
-          <h2 class="section-title">Account Information</h2>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.username.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.username.id_for_label }}"><span>🔐</span> Username *</label>
-              {{ form.username }}
-              {% if form.username.errors %}
-                <div class="invalid-feedback d-block">{{ form.username.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.password.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.password.id_for_label }}"><span>🔒</span> Password *</label>
-              {{ form.password }}
-              {% if form.password.errors %}
-                <div class="invalid-feedback d-block">{{ form.password.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="btn-container">
-            <div></div> <!-- Empty div for spacing -->
-            <button type="button" class="btn btn-next" onclick="showSection(2)">Next</button>
-          </div>
+      <!-- Step 1 -->
+      <section class="form-step active" data-step="1">
+        <h2>Account Information</h2>
+        <div class="grid">
+          <div><label>Username *</label><input type="text" name="username" required /></div>
+          <div><label>Password *</label><input type="password" name="password" required /></div>
         </div>
-        
-        <!-- Section 2: Personal Details -->
-        <div class="form-section" id="section-2">
-          <h2 class="section-title">Personal Details</h2>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.army_no.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.army_no.id_for_label }}"><span>🎖</span> Army Number *</label>
-              {{ form.army_no }}
-              {% if form.army_no.errors %}
-                <div class="invalid-feedback d-block">{{ form.army_no.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.rank.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.rank.id_for_label }}"><span>⭐</span> Rank *</label>
-              {{ form.rank }}
-              {% if form.rank.errors %}
-                <div class="invalid-feedback d-block">{{ form.rank.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.name.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.name.id_for_label }}"><span>👤</span> Full Name *</label>
-              {{ form.name }}
-              {% if form.name.errors %}
-                <div class="invalid-feedback d-block">{{ form.name.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.dob.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.dob.id_for_label }}"><span>📅</span> Date of Birth *</label>
-              {{ form.dob }}
-              <div class="input-hint">yyyy-mm-dd</div>
-              {% if form.dob.errors %}
-                <div class="invalid-feedback d-block">{{ form.dob.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.father_name.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.father_name.id_for_label }}"><span>👨</span> Father's Name *</label>
-              {{ form.father_name }}
-              {% if form.father_name.errors %}
-                <div class="invalid-feedback d-block">{{ form.father_name.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.enrolment_no.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.enrolment_no.id_for_label }}"><span>🆔</span> Enrolment Number *</label>
-              {{ form.enrolment_no }}
-              {% if form.enrolment_no.errors %}
-                <div class="invalid-feedback d-block">{{ form.enrolment_no.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.doe.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.doe.id_for_label }}"><span>📆</span> Date of Enrolment *</label>
-              {{ form.doe }}
-              <div class="input-hint">yyyy-mm-dd</div>
-              {% if form.doe.errors %}
-                <div class="invalid-feedback d-block">{{ form.doe.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.aadhar_number.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.aadhar_number.id_for_label }}"><span>🪪</span> Aadhar Number *</label>
-              {{ form.aadhar_number }}
-              <div class="input-hint">12-digit Aadhar number</div>
-              {% if form.aadhar_number.errors %}
-                <div class="invalid-feedback d-block">{{ form.aadhar_number.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.unit.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.unit.id_for_label }}"><span>🏢</span> Unit *</label>
-              {{ form.unit }}
-              {% if form.unit.errors %}
-                <div class="invalid-feedback d-block">{{ form.unit.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-md-6 {% if form.trg_centre.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.trg_centre.id_for_label }}"><span>🎓</span> Training Centre *</label>
-              {{ form.trg_centre }}
-              {% if form.trg_centre.errors %}
-                <div class="invalid-feedback d-block">{{ form.trg_centre.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="btn-container">
-            <button type="button" class="btn btn-prev" onclick="showSection(1)">Previous</button>
-            <button type="button" class="btn btn-next" onclick="showSection(3)">Next</button>
-          </div>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" disabled>Previous</button>
+          <button type="button" class="btn btn-primary" data-next>Next</button>
         </div>
-        
-        <!-- Section 3: Formation Details -->
-        <div class="form-section" id="section-3">
-          <h2 class="section-title">Formation Details</h2>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.fmn_bde.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.fmn_bde.id_for_label }}">Brigade *</label>
-              {{ form.fmn_bde }}
-              {% if form.fmn_bde.errors %}
-                <div class="invalid-feedback d-block">{{ form.fmn_bde.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.fmn_div.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.fmn_div.id_for_label }}">Division *</label>
-              {{ form.fmn_div }}
-              {% if form.fmn_div.errors %}
-                <div class="invalid-feedback d-block">{{ form.fmn_div.errors|striptags }}</div>
-              {% endif %}
-            </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section class="form-step" data-step="2">
+        <h2>Personal Details</h2>
+        <div class="grid">
+          <div><label>Army No / Enrolment No *</label><input type="text" name="army_no" required /></div>
+          <div><label>Rank *</label><input type="text" name="rank" required /></div>
+          <div>
+            <label>Trade *</label>
+            <select name="trade" required>
+              <option value="">-- Select Trade --</option>
+              <option>TTC</option><option>OCC</option><option>DTMN</option><option>EFS</option>
+              <option>DMV</option><option>LMN</option><option>(CLK SD)</option><option>STEWARD</option>
+              <option>WASHERMAN (HOUSE KEEPER)</option><option>CHEFCOM (MESS KEEPER)</option>
+              <option>SKT</option><option>MUSICIAN</option><option>(ARTSN WW)</option>
+              <option>(HAIR DRESSER)</option><option>(SP STAFF)</option>
+            </select>
           </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.fmn_corps.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.fmn_corps.id_for_label }}">Corps *</label>
-              {{ form.fmn_corps }}
-              {% if form.fmn_corps.errors %}
-                <div class="invalid-feedback d-block">{{ form.fmn_corps.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.fmn_comd.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.fmn_comd.id_for_label }}">Command *</label>
-              {{ form.fmn_comd }}
-              {% if form.fmn_comd.errors %}
-                <div class="invalid-feedback d-block">{{ form.fmn_comd.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="btn-container">
-            <button type="button" class="btn btn-prev" onclick="showSection(2)">Previous</button>
-            <button type="button" class="btn btn-next" onclick="showSection(4)">Next</button>
-          </div>
+          <div><label>Name *</label><input type="text" name="name" required /></div>
+          <div><label>Date of Birth *</label><input type="date" name="dob" required /></div>
+          <div><label>Date of Enrollment *</label><input type="date" name="doe" required /></div>
+          <div><label>Aadhar No *</label><input type="text" name="aadhar_number" pattern="[0-9]{12}" maxlength="12" required /></div>
+          <div><label>Father’s Name *</label><input type="text" name="father_name" required /></div>
+          <div class="grid-1"><label>Photograph *</label><input type="file" name="photograph" accept="image/*" required /></div>
         </div>
-        
-        <!-- Section 4: Education & Skills + Exam Details -->
-        <div class="form-section" id="section-4">
-          <h2 class="section-title">Education & Skills + Exam Details</h2>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.qualification.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.qualification.id_for_label }}">Qualification *</label>
-              {{ form.qualification }}
-              {% if form.qualification.errors %}
-                <div class="invalid-feedback d-block">{{ form.qualification.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.level_of_qualification.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.level_of_qualification.id_for_label }}">Level of Qualification *</label>
-              {{ form.level_of_qualification }}
-              {% if form.level_of_qualification.errors %}
-                <div class="invalid-feedback d-block">{{ form.level_of_qualification.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.nsqf_level.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.nsqf_level.id_for_label }}">NSQF Level *</label>
-              {{ form.nsqf_level }}
-              {% if form.nsqf_level.errors %}
-                <div class="invalid-feedback d-block">{{ form.nsqf_level.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.skill.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.skill.id_for_label }}">Skill *</label>
-              {{ form.skill }}
-              {% if form.skill.errors %}
-                <div class="invalid-feedback d-block">{{ form.skill.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.qf.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.qf.id_for_label }}">QF *</label>
-              {{ form.qf }}
-              {% if form.qf.errors %}
-                <div class="invalid-feedback d-block">{{ form.qf.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.category.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.category.id_for_label }}">Category *</label>
-              {{ form.category }}
-              {% if form.category.errors %}
-                <div class="invalid-feedback d-block">{{ form.category.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.center.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.center.id_for_label }}">Center *</label>
-              {{ form.center }}
-              {% if form.center.errors %}
-                <div class="invalid-feedback d-block">{{ form.center.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="row mb-4">
-            <div class="col-md-6 {% if form.shift.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.shift.id_for_label }}">Shift *</label>
-              {{ form.shift }}
-              {% if form.shift.errors %}
-                <div class="invalid-feedback d-block">{{ form.shift.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.district.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.district.id_for_label }}">District *</label>
-              {{ form.district }}
-              {% if form.district.errors %}
-                <div class="invalid-feedback d-block">{{ form.district.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="row mb-4">
-            <div class="col-md-6 {% if form.state.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.state.id_for_label }}">State *</label>
-              {{ form.state }}
-              {% if form.state.errors %}
-                <div class="invalid-feedback d-block">{{ form.state.errors|striptags }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-6 {% if form.photograph.errors %}has-error{% endif %}">
-              <label class="form-label" for="{{ form.photograph.id_for_label }}"><span>📸</span> Photograph *</label>
-              {{ form.photograph }}
-              {% if form.photograph.errors %}
-                <div class="invalid-feedback d-block">{{ form.photograph.errors|striptags }}</div>
-              {% endif %}
-            </div>
-          </div>
-          
-          <div class="btn-container">
-            <button type="button" class="btn btn-prev" onclick="showSection(3)">Previous</button>
-            <button type="submit" class="btn btn-submit">🚀 Register Candidate</button>
-          </div>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" data-prev>Previous</button>
+          <button type="button" class="btn btn-primary" data-next>Next</button>
         </div>
-      </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section class="form-step" data-step="3">
+        <h2>Exam Details</h2>
+        <div class="grid">
+          <div><label>Qualification *</label> <select name="qualification" required> <option value="">Select</option> <option value="Primary/Secondary">Primary/Secondary</option> <option value="Secondary">Secondary</option> </select> </div>
+          <div><label>NSQF Level</label><input type="text" name="nsqf_level" value="4.5" readonly /></div>
+          <div class="grid-1" style="grid-column:1/-1">
+            <label>Exam Center *</label>
+            <select name="exam_center" required>
+              <option value="">-- Select Exam Center --</option>
+              <option>Jaipur</option><option>Hissar</option><option>Bathinda</option>
+              <option>Sriganganagar</option><option>Bikaner</option><option>Suratgarh</option>
+              <option>Kota</option><option>Port Blair</option>
+              <option>Ahmednagar</option><option>Bangalore</option><option>Chennai</option>
+              <option>Pune MINTSD</option><option>MCTE Mhow</option>
+              <option>Secunderabad</option><option>Jhansi</option><option>Ahmedabad</option>
+              <option>Jodhpur</option><option>Saugor</option><option>Bhopal</option><option>Pune</option>
+              <option>Binaguri</option><option>Kolkata</option><option>Missamari</option>
+              <option>Rangapahar</option><option>Dinjan</option><option>Gangtok</option>
+              <option>Leimakhong</option><option>Tenga</option><option>Panagarh</option>
+              <option>Ranchi</option><option>Likabali</option><option>Tejpur</option>
+              <option>Kalimpong</option>
+              <option>Jalandhar</option><option>Ambala</option><option>Delhi</option>
+              <option>Amritsar</option><option>Ferozepur</option><option>Patiala</option>
+              <option>Jammu</option><option>Pathankot</option><option>Chandimandir</option>
+              <option>Meerut</option>
+              <option>Agra</option><option>Bareilly</option><option>Jabalpur</option>
+              <option>Lucknow</option><option>Ranikhet</option><option>Dehradun</option>
+              <option>Udhampur</option><option>Baramula</option><option>Kargil</option>
+              <option>Leh</option><option>Srinagar</option><option>Kupwara</option>
+              <option>Allahabad</option><option>Rajouri</option><option>Akhnoor</option>
+              <option>Nagrota</option><option>Palampur</option><option>Mathura</option>
+              <option>Karu</option>
+            </select>
+          </div>
+          <div><label>Training Center *</label>
+            <select id="training_center" name="training_center" required>
+              <option value="">-- Select Training Center --</option>
+              <option value="1 Signal Training Center">1 Signal Training Center</option>
+              <option value="2 Signal Training Center">2 Signal Training Center</option>
+            </select>
+          </div>
+          <div><label>State *</label><input type="text" id="state" name="state" readonly required /></div>
+          <div><label>District *</label><input type="text" id="district" name="district" readonly required /></div>
+          <div><label>Duration of Qualification</label><input type="text" name="duration" /></div>
+          <div><label>Credits</label><input type="text" name="credits" /></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" data-prev>Previous</button>
+          <button type="submit" class="btn btn-primary">🚀 Register Candidate</button>
+        </div>
+      </section>
     </form>
   </div>
 
-  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script>
-    // Function to show specific section and update progress
-    function showSection(sectionNumber) {
-      // Hide all sections
-      document.querySelectorAll('.form-section').forEach(section => {
-        section.classList.remove('active');
-      });
-      
-      // Show the selected section
-      document.getElementById('section-' + sectionNumber).classList.add('active');
-      
-      // Update progress bar (for 4 steps, divide by 3 intervals)
-      const progressPercentage = (sectionNumber - 1) * (100 / 3);
-      document.querySelector('.progress-bar').style.width = progressPercentage + '%';
-      
-      // Update step indicators
-      document.querySelectorAll('.step').forEach((step, index) => {
-        if (index < sectionNumber) {
-          step.classList.add('active');
-        } else {
-          step.classList.remove('active');
-        }
-      });
-    }
-    
-    // Add Bootstrap classes to form elements
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('form');
-      if (!form) return;
-      
-      // Add classes to inputs, textareas, selects
-      form.querySelectorAll('input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]), textarea, select')
-        .forEach(el => {
-          if (el.tagName === 'SELECT') {
-            el.classList.add('form-select');
-          } else {
-            el.classList.add('form-control');
-          }
-        });
-      
-      // Mark fields with errors
-      document.querySelectorAll('.has-error input, .has-error select, .has-error textarea')
-        .forEach(el => el.classList.add('is-invalid'));
-    });
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    const stepDots = Array.from(document.querySelectorAll('.stepper .step'));
+    let current = 0;
+    function showStep(i){ steps.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+      stepDots.forEach((d,idx)=>d.classList.toggle('active', idx<=i)); current = i;}
+    document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.min(current+1, steps.length-1))));
+    document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.max(current-1, 0))));
+    // Training center autofill
+    const tc=document.getElementById('training_center'), state=document.getElementById('state'), district=document.getElementById('district');
+    function applyCenter(v){ if(v==='1'){state.value='MP';district.value='Jabalpur';} else if(v==='2'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
+    tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
 </body>
 </html>
