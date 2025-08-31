@@ -127,7 +127,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       <div class="step"><div class="dot">3</div>Exam Details<br/>Details</div>
     </div>
 
-    <form id="regForm" class="card" method="post" enctype="multipart/form-data" novalidate>
+    <form id="regForm" class="card" method="post" enctype="multipart/form-data" 
+      action="{% url 'register_candidate' %}" novalidate>
+
       {% csrf_token %}
       <!-- Step 1 -->
       <section class="form-step active" data-step="1">
@@ -237,7 +239,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.max(current-1, 0))));
     // Training center autofill
     const tc=document.getElementById('training_center'), state=document.getElementById('state'), district=document.getElementById('district');
-    function applyCenter(v){ if(v==='1 Signal Training Center'){state.value='MP';district.value='Jabalpur';} else if(v==='2'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
+    function applyCenter(v){ if(v==='1 Signal Training Center'){state.value='MP';district.value='Jabalpur';} else if(v==='2 Signal Training Center'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
     tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
   <div class="footer-note">

@@ -136,7 +136,6 @@
                 <div class="profile-details">
                     <p><strong>Name:</strong> {{ candidate.name }}</p>
                     <p><strong>Army No:</strong> {{ candidate.army_no }}</p>
-                    <p><strong>Unit:</strong> {{ candidate.unit }}</p>
                      <hr>
                         <a href="{% url 'login' %}" 
                         style="display:block; margin-top:10px; padding:8px; text-align:center; 
@@ -163,11 +162,11 @@
                     </div>
                     <div class="exam-detail">
                         <span class="label">Trade:</span>
-                        <span class="value">{{ candidate.category }}</span>
+                        <span class="value">{{ candidate.trade }}</span>
                     </div>
                     <div class="exam-detail">
                         <span class="label">Center:</span>
-                        <span class="value">{{ candidate.center }}</span>
+                        <span class="value">{{ candidate.exam_center }}</span>
                     </div>
                     <div class="exam-detail">
                         <span class="label">Shift:</span>

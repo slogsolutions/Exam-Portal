@@ -1,11 +1,12 @@
-# your_app/models.py
 from django.db import models
 from django.core.exceptions import ValidationError
 from reference.models import Level, Skill, QF, Category
 
 def validate_dat_file(value):
+    """Simple validation - only check file extension"""
     if not value.name.lower().endswith(".dat"):
         raise ValidationError("Only .dat files are allowed.")
+    # REMOVED file content reading to avoid I/O errors
 
 class Question(models.Model):
     class Part(models.TextChoices):
@@ -17,28 +18,26 @@ class Question(models.Model):
         F = "F", "Part F - True/False"
 
     text = models.TextField()
-    part = models.CharField(max_length=1, choices=Part.choices)  # required
+    part = models.CharField(max_length=1, choices=Part.choices)
     marks = models.DecimalField(max_digits=5, decimal_places=2, default=1)
-
     options = models.JSONField(blank=True, null=True)
     correct_answer = models.JSONField(blank=True, null=True)
-
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def _str_(self):
         return f"[{self.get_part_display()}] {self.text[:60]}..."
 
 class QuestionUpload(models.Model):
     file = models.FileField(upload_to="uploads/", validators=[validate_dat_file])
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    decryption_password = models.CharField(max_length=255,default="default123")
 
-    def __str__(self):
+    def _str_(self):
         return self.file.name
 
 class QuestionPaper(models.Model):
@@ -54,7 +53,7 @@ class QuestionPaper(models.Model):
     upload = models.ForeignKey(QuestionUpload, on_delete=models.SET_NULL, null=True, blank=True)
     questions = models.ManyToManyField(Question, through="PaperQuestion")
 
-    def __str__(self):
+    def _str_(self):
         return self.title
 
 class PaperQuestion(models.Model):
