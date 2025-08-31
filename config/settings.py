@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "registration",
     "questions.apps.QuestionsConfig",
     "exams",
-    "evaluation",
     "results",
     "syncops",
 ]
@@ -145,5 +144,25 @@ connect(
 )
 
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "config" / "static",   # since your static is inside config/
+]
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Exam Portal",
+    "site_header": "Exam Portal",
+    "welcome_sign": "JAI HIND!",
+    "copyright": "Developed by SLOG Solutions Pvt Ltd and 2STC",
+
+    # Logo settings
+    "site_logo": "img/logo.png",           # top-left logo in header
+    "login_logo": "img/logo.png",          # login page logo (light bg)
+    "login_logo_dark": "img/logo.png",     # login page logo (dark bg)
+
+    # UI tweaks
+    "show_ui_builder": True,
+}
+
+    
