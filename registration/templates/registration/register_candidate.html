@@ -98,6 +98,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .btn-ghost{border:2px solid var(--army-gold);color:var(--army-gold);background:transparent;}
     .btn-primary{background:var(--army-gold);color:#000;}
     .form-step{display:none}.form-step.active{display:block}
+    .footer-note {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--army-gold);
+  background: rgba(30,46,34,0.9); /* subtle army-green backdrop */
+  padding: 6px 14px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
   </style>
 </head>
 <body>
@@ -227,5 +240,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     function applyCenter(v){ if(v==='1'){state.value='MP';district.value='Jabalpur';} else if(v==='2'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
     tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
+  <div class="footer-note">
+  Jointly developed by Slog Solutions Pvt Ltd and 2STC
+</div>
 </body>
 </html>
