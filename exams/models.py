@@ -2,21 +2,21 @@
 from django.db import models
 from django.conf import settings
 from centers.models import Center
-from reference.models import Category
+from reference.models import Trade
 from questions.models import QuestionPaper
 
 class ExamDayAvailability(models.Model):
     """
-    Which categories' papers are available on a given date (6 or 7 per day).
+    Which trades' papers are available on a given date (6 or 7 per day).
     """
     date = models.DateField()
-    categories = models.ManyToManyField(Category, related_name="available_on")
+    trades = models.ManyToManyField(Trade, related_name="available_on")
 
     class Meta:
         unique_together = ("date",)
 
     def __str__(self):
-        return f"{self.date} ({self.categories.count()} categories)"
+        return f"{self.date} ({self.trades.count()} trades)"
 
 class Shift(models.Model):
     """

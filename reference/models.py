@@ -24,7 +24,7 @@ class QF(models.Model):
     name = models.CharField(max_length=120, unique=True)  # Qualification Framework name/descriptor
     def __str__(self): return self.name
 
-class Category(models.Model):
+class Trade(models.Model):
     """
     14 categories total (we'll seed later).
     """

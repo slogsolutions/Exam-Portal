@@ -101,7 +101,11 @@
         <!-- form now points to backend -->
         <form method="post" id="exam-form" action="{% url 'exam_interface' %}">
             {% csrf_token %}
+            {% if part_a %}
             <input type="hidden" name="paper_id" value="{{ part_a.id }}">
+            {% elif part_b %}
+            <input type="hidden" name="paper_id" value="{{ part_b.id }}">
+            {% endif %}>
 
             {% for question in part_a.questions.all %}
             <div class="question-card question-page" id="question-{{ forloop.counter0 }}" style="{% if not forloop.first %}display:none{% endif %}">

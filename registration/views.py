@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import CandidateProfile
+from reference.models import Trade
 from .forms import CandidateRegistrationForm
 from django.contrib import messages
 from questions.models import QuestionPaper, Question
@@ -49,9 +50,12 @@ def exam_interface(request):
             "message": "You cannot start the exam yet."
         })
 
-    category = candidate_profile.category
-    part_a = QuestionPaper.objects.filter(category=category, is_common=False).first()
-    part_b = QuestionPaper.objects.filter(category=category, is_common=True).first()
+    trade_obj = None
+    if candidate_profile.trade:
+        print(candidate_profile.trade)
+        trade_obj = get_object_or_404(Trade, name=candidate_profile.trade)
+    part_a = QuestionPaper.objects.filter(trade=trade_obj, is_common=False).first()
+    part_b = QuestionPaper.objects.filter(trade=trade_obj, is_common=True).first()
     current_paper = part_a or part_b
     duration_seconds = int(current_paper.duration.total_seconds()) if current_paper and current_paper.duration else 0
     if request.method == "POST":
@@ -114,7 +118,7 @@ def export_answers_pdf(request, candidate_id):
         c.setFont("Helvetica", 12)
         c.drawString(1 * inch, height - 1.5 * inch, f"Army No: {army_no}")
         c.drawString(1 * inch, height - 1.8 * inch, f"Name: {candidate_name}")
-        c.drawString(1 * inch, height - 2.1 * inch, f"Category: {candidate.category}")
+        c.drawString(1 * inch, height - 2.1 * inch, f"Trade: {candidate.trade}")
         c.drawString(1 * inch, height - 2.4 * inch, f"Paper: {answers[0].paper.title}")
 
         y = height - 3 * inch

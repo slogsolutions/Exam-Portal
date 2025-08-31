@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from reference.models import Level, Skill, QF, Category
+from reference.models import Level, Skill, QF, Trade
 
 def validate_dat_file(value):
     """Simple validation - only check file extension"""
@@ -25,7 +25,7 @@ class Question(models.Model):
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.SET_NULL, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -46,7 +46,7 @@ class QuestionPaper(models.Model):
     level = models.ForeignKey(Level, on_delete=models.PROTECT, null=True, blank=True)
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True)
     qf = models.ForeignKey(QF, on_delete=models.PROTECT, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True)
+    trade = models.ForeignKey(Trade, on_delete=models.PROTECT, null=True, blank=True)
     duration = models.DurationField(null=True, blank=True,help_text="Enter exam duration in format HH:MM:SS (e.g., 01:30:00 for 1h30m)")
     active_from = models.DateField(null=True, blank=True)
     active_to = models.DateField(null=True, blank=True)

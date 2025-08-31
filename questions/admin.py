@@ -65,14 +65,14 @@ class PaperQuestionInline(admin.TabularInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "part", "marks", "level", "skill", "category", "is_active")
-    list_filter = ("part", "level", "skill", "category", "is_active")
+    list_display = ("id", "part", "marks", "level", "skill", "trade", "is_active")
+    list_filter = ("part", "level", "skill", "trade", "is_active")
     search_fields = ("text",)
 
 @admin.register(QuestionPaper)
 class QuestionPaperAdmin(admin.ModelAdmin):
-    list_display = ("title", "upload", "is_common", "level", "skill", "category", "active_from", "active_to")
-    list_filter = ("is_common", "level", "skill", "category")
+    list_display = ("title", "upload", "is_common", "level", "skill", "trade", "active_from", "active_to")
+    list_filter = ("is_common", "level", "skill", "trade")
     inlines = [PaperQuestionInline]
 
     def save_model(self, request, obj, form, change):
