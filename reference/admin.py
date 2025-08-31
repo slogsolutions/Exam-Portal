@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Level, Skill, QF, Trade, Qualification
+from .models import Trade
 
-admin.site.register([Level, Skill, QF, Trade, Qualification])
+admin.site.register([Trade])

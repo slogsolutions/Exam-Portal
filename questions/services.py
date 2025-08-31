@@ -1,7 +1,7 @@
 import pickle
 from django.db import transaction
 from .models import Question
-from reference.models import Level, Skill, QF, Trade
+from reference.models import Trade
 import base64
 import os
 from cryptography.fernet import Fernet, InvalidToken
@@ -74,9 +74,6 @@ def import_questions_from_dicts(records):
     """Import questions from list of dictionaries"""
     created = []
     for q in records:
-        level = Level.objects.filter(name=q.get("level")).first() if q.get("level") else None
-        skill = Skill.objects.filter(name=q.get("skill")).first() if q.get("skill") else None
-        qf = QF.objects.filter(name=q.get("qf")).first() if q.get("qf") else None
         trade = Trade.objects.filter(name=q.get("trade")).first() if q.get("trade") else None
 
         obj = Question.objects.create(
@@ -85,9 +82,6 @@ def import_questions_from_dicts(records):
             marks=q.get("marks", 1),
             options=q.get("options"),
             correct_answer=q.get("correct_answer"),
-            level=level,
-            skill=skill,
-            qf=qf,
             trade=trade,
         )
         created.append(obj)

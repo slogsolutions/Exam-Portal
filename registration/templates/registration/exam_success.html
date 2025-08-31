@@ -55,6 +55,34 @@
     .card-box h4 span {
       color: #00c3ff; /* Accent blue */
     }
+    .footer-container {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.footer-note {
+  color: var(--army-gold);
+  background: rgba(230, 212, 5, 0.9);
+  padding: 6px 14px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  margin-top: 6px;
+  font-weight: 700;
+}
+
+/* bigger for "Developed by" */
+.footer-note.developed {
+  font-size: 16px;
+}
+
+/* slightly smaller for "All Rights Reserved" */
+.footer-note.reserved {
+  font-size: 13px;
+  font-weight: 600;
+}
   </style>
 </head>
 <body>
@@ -65,5 +93,13 @@
       <h4> <span>Jai Hind</span></h4>
     </div>
   </div>
+  <div class="footer-container">
+  <div class="footer-note developed">
+    Developed by SLOG Solutions Pvt Ltd and 2STC
+  </div>
+  <div class="footer-note reserved">
+    All Rights Reserved @ SLOG Solutions Pvt Ltd
+  </div>
+</div>
 </body>
 </html>

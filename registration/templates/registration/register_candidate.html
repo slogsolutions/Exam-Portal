@@ -98,19 +98,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .btn-ghost{border:2px solid var(--army-gold);color:var(--army-gold);background:transparent;}
     .btn-primary{background:var(--army-gold);color:#000;}
     .form-step{display:none}.form-step.active{display:block}
-    .footer-note {
+    .footer-container {
   position: fixed;
   bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 14px;
-  font-weight: 700;
+  text-align: center;
+}
+
+.footer-note {
   color: var(--army-gold);
-  background: rgba(30,46,34,0.9); /* subtle army-green backdrop */
+  background: rgba(30,46,34,0.9);
   padding: 6px 14px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  margin-top: 6px;
+  font-weight: 700;
 }
+
+/* bigger for "Developed by" */
+.footer-note.developed {
+  font-size: 16px;
+}
+
+/* slightly smaller for "All Rights Reserved" */
+.footer-note.reserved {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
   </style>
 </head>
 <body>
@@ -242,8 +259,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     function applyCenter(v){ if(v==='1 Signal Training Center'){state.value='MP';district.value='Jabalpur';} else if(v==='2 Signal Training Center'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
     tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
-  <div class="footer-note">
-  Jointly developed by Slog Solutions Pvt Ltd and 2STC
+  <div class="footer-container">
+  <div class="footer-note developed">
+    Developed by SLOG Solutions Pvt Ltd and 2STC
+  </div>
+  <div class="footer-note reserved">
+    All Rights Reserved @ SLOG Solutions Pvt Ltd
+  </div>
 </div>
 </body>
 </html>
