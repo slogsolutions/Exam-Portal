@@ -237,7 +237,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.max(current-1, 0))));
     // Training center autofill
     const tc=document.getElementById('training_center'), state=document.getElementById('state'), district=document.getElementById('district');
-    function applyCenter(v){ if(v==='1'){state.value='MP';district.value='Jabalpur';} else if(v==='2'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
+    function applyCenter(v){ if(v==='1 Signal Training Center'){state.value='MP';district.value='Jabalpur';} else if(v==='2'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
     tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
   <div class="footer-note">
