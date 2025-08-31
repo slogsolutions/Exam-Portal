@@ -152,9 +152,10 @@ STATICFILES_DIRS = [
 
 JAZZMIN_SETTINGS = {
     "site_title": "Exam Portal",
-    "site_header": "Exam Portal",
+    "site_header": "Admin Portal",
     "welcome_sign": "JAI HIND!",
     "copyright": "Developed by SLOG Solutions Pvt Ltd and 2STC",
+    "site_brand": "Admin Portal",
 
     # Logo settings
     "site_logo": "img/logo.png",           # top-left logo in header
