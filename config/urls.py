@@ -29,6 +29,7 @@ urlpatterns = [
     path("", home),
     path("candidate/", include("registration.urls")),
     path("results/", include("results.urls")),
+    
 
 
 ]
