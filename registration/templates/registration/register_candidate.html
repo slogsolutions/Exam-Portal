@@ -50,7 +50,6 @@
       margin-bottom: 6px;
     }
 
-    /* Inputs + Selects */
     input, select {
       width: 100%;
       padding: 12px;
@@ -69,7 +68,6 @@
       box-shadow: 0 0 6px var(--army-gold);
     }
 
-    /* Custom dropdown arrow */
     select {
       background-image: url("data:image/svg+xml;utf8,<svg fill='%23d4af37' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
       background-repeat: no-repeat;
@@ -83,14 +81,11 @@
       color: #fff;
     }
 
-    /* Date input calendar icon */
-    /* Make the calendar icon golden */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(72%) sepia(85%) saturate(450%) hue-rotate(20deg) brightness(1.2);
-  cursor: pointer;
-  opacity: 1;
-}
-
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(72%) sepia(85%) saturate(450%) hue-rotate(20deg) brightness(1.2);
+      cursor: pointer;
+      opacity: 1;
+    }
 
     input[readonly]{background:rgba(255,255,255,0.1);color:#ddd;}
     .actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px;}
@@ -99,35 +94,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     .btn-primary{background:var(--army-gold);color:#000;}
     .form-step{display:none}.form-step.active{display:block}
     .footer-container {
-  position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.footer-note {
-  color: var(--army-gold);
-  background: rgba(30,46,34,0.9);
-  padding: 6px 14px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
-  margin-top: 6px;
-  font-weight: 700;
-}
-
-/* bigger for "Developed by" */
-.footer-note.developed {
-  font-size: 16px;
-}
-
-/* slightly smaller for "All Rights Reserved" */
-.footer-note.reserved {
-  font-size: 13px;
-  font-weight: 600;
-}
-
-
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .footer-note {
+      color: var(--army-gold);
+      background: rgba(30,46,34,0.9);
+      padding: 6px 14px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      margin-top: 6px;
+      font-weight: 700;
+    }
+    .footer-note.developed { font-size: 16px; }
+    .footer-note.reserved { font-size: 13px; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -195,9 +178,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       <section class="form-step" data-step="3">
         <h2>Exam Details</h2>
         <div class="grid">
-          <div><label>Qualification *</label> <select name="qualification" required> <option value="">Select</option> <option value="Primary/Secondary">Primary/Secondary</option> <option value="Secondary">Secondary</option> </select> </div>
+          <div><label>Qualification *</label> 
+            <select name="qualification" required> 
+              <option value="">Select</option> 
+              <option value="Primary/Secondary">Primary/Secondary</option> 
+              <option value="Secondary">Secondary</option> 
+            </select> 
+          </div>
           <div><label>NSQF Level</label><input type="text" name="nsqf_level" value="4.5" readonly /></div>
-          <div class="grid-1" style="grid-column:1/-1">
+          <div>
             <label>Exam Center *</label>
             <select name="exam_center" required>
               <option value="">-- Select Exam Center --</option>
@@ -226,7 +215,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
               <option>Karu</option>
             </select>
           </div>
-          <div><label>Training Center *</label>
+          <div>
+            <label>Training Center *</label>
             <select id="training_center" name="training_center" required>
               <option value="">-- Select Training Center --</option>
               <option value="1 Signal Training Center">1 Signal Training Center</option>
@@ -237,6 +227,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
           <div><label>District *</label><input type="text" id="district" name="district" readonly required /></div>
           <div><label>Duration of Qualification</label><input type="text" name="duration" /></div>
           <div><label>Credits</label><input type="text" name="credits" /></div>
+          <div>
+            <label>Shift *</label>
+            <select name="shift" required>
+              <option value="">-- Select Shift --</option>
+              {% for shift in shifts %}
+                <option value="{{ shift.id }}">{{ shift }}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
         <div class="actions">
           <button type="button" class="btn btn-ghost" data-prev>Previous</button>
@@ -254,18 +253,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       stepDots.forEach((d,idx)=>d.classList.toggle('active', idx<=i)); current = i;}
     document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.min(current+1, steps.length-1))));
     document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>showStep(Math.max(current-1, 0))));
-    // Training center autofill
     const tc=document.getElementById('training_center'), state=document.getElementById('state'), district=document.getElementById('district');
     function applyCenter(v){ if(v==='1 Signal Training Center'){state.value='MP';district.value='Jabalpur';} else if(v==='2 Signal Training Center'){state.value='Goa';district.value='Goa';} else {state.value='';district.value='';}}
     tc.addEventListener('change', e=>applyCenter(e.target.value)); applyCenter(tc.value||'');
   </script>
   <div class="footer-container">
-  <div class="footer-note developed">
-    Developed by SLOG Solutions Pvt Ltd and 2STC
+    <div class="footer-note developed">Developed by SLOG Solutions Pvt Ltd and 2STC</div>
+    <div class="footer-note reserved">All Rights Reserved @ SLOG Solutions Pvt Ltd</div>
   </div>
-  <div class="footer-note reserved">
-    All Rights Reserved @ SLOG Solutions Pvt Ltd
-  </div>
-</div>
 </body>
 </html>

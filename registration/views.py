@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import inch
 from reportlab.lib.pdfencrypt import StandardEncryption
+from exams.models import Shift   # ✅ Added import for Shift
 
 
 @login_required
@@ -38,7 +39,10 @@ def register_candidate(request):
             print("Registration form invalid:", form.errors)
     else:
         form = CandidateRegistrationForm()
-    return render(request, "registration/register_candidate.html", {"form": form})
+    return render(request, "registration/register_candidate.html", {
+        "form": form,
+        "shifts": Shift.objects.all(),   # ✅ pass shifts to template
+    })
 
 
 @login_required
@@ -54,10 +58,12 @@ def exam_interface(request):
     if candidate_profile.trade:
         print(candidate_profile.trade)
         trade_obj = get_object_or_404(Trade, name=candidate_profile.trade)
+
     part_a = QuestionPaper.objects.filter(trade=trade_obj, is_common=False).first()
     part_b = QuestionPaper.objects.filter(trade=trade_obj, is_common=True).first()
     current_paper = part_a or part_b
     duration_seconds = int(current_paper.duration.total_seconds()) if current_paper and current_paper.duration else 0
+
     if request.method == "POST":
         paper_id = request.POST.get("paper_id")
         paper = QuestionPaper.objects.get(id=paper_id)

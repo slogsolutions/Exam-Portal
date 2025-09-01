@@ -1,7 +1,7 @@
-# forms.py
 from django import forms
 from django.contrib.auth import get_user_model
 from .models import CandidateProfile
+from exams.models import Shift   # ✅ ensure Shift is imported
 
 User = get_user_model()
 
@@ -13,11 +13,11 @@ class CandidateRegistrationForm(forms.ModelForm):
     class Meta:
         model = CandidateProfile
         fields = [
-                "army_no", "rank", "trade", "name", "dob", "doe",
-                "aadhar_number", "father_name", "photograph",
-                "qualification", "nsqf_level", "exam_center", "training_center",
-                "state", "district", "duration", "credits",
-                "shift",
+            "army_no", "rank", "trade", "name", "dob", "doe",
+            "aadhar_number", "father_name", "photograph",
+            "qualification", "nsqf_level", "exam_center", "training_center",
+            "state", "district", "duration", "credits",
+            "shift",   # ✅ Shift field included
         ]
         widgets = {
             "dob": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
